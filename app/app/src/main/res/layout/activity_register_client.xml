@@ -1,40 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterCook">
-
-    <EditText
-        android:id="@+id/editCVV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="CVV"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="354dp" />
-
-    <EditText
-        android:id="@+id/editCreditCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Credit Card"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="289dp" />
-
-    <EditText
-        android:id="@+id/editLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="99dp" />
+    tools:context=".RegisterClient">
 
     <EditText
         android:id="@+id/editFirstName"
@@ -43,8 +13,24 @@
         android:ems="10"
         android:hint="First name"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="32dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"/>
+
+    <EditText
+        android:id="@+id/editLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editFirstName"
+        tools:layout_editor_absoluteX="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editFirstName"
+        android:layout_marginTop="12dp"/>
 
     <EditText
         android:id="@+id/editInputEmail"
@@ -53,28 +39,11 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/editLastName"
         tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="162dp" />
-
-    <EditText
-        android:id="@+id/editAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Address"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="422dp" />
-
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Short Description"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="495dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editLastName"
+        android:layout_marginTop="12dp"/>
 
     <EditText
         android:id="@+id/editMakePassword"
@@ -83,14 +52,60 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editInputEmail"
         tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="212dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editInputEmail"
+        android:layout_marginTop="12dp"/>
+
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Address"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editCVV"
+        tools:layout_editor_absoluteX="103dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editMakePassword"
+        android:layout_marginTop="12dp"/>
+
+    <EditText
+        android:id="@+id/editCreditCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Credit Card"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editMakePassword"
+        tools:layout_editor_absoluteX="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editAddress"
+        android:layout_marginTop="12dp"/>
+
+    <EditText
+        android:id="@+id/editCVV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="CVV"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editCreditCard"
+        tools:layout_editor_absoluteX="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editCreditCard"
+        android:layout_marginTop="12dp"/>
 
     <Button
         android:id="@+id/btnMakeClient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Make a client account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editAddress"
         tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="582dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editCVV"
+        android:layout_marginTop="12dp"/>
+</RelativeLayout>

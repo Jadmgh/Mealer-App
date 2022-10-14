@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,51 +8,82 @@
 
     <EditText
         android:id="@+id/editEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textEmailAddress"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="280dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <EditText
         android:id="@+id/editPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="95dp"
-        tools:layout_editor_absoluteY="367dp" />
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/editEmail"/>
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        tools:layout_editor_absoluteX="153dp"
-        tools:layout_editor_absoluteY="478dp" />
-
-    <Button
-        android:id="@+id/btnRegisterCook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register As Cook"
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="611dp" />
+        app:layout_constraintBottom_toTopOf="@+id/txtDontHaveAccount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/editPassword"
+        android:layout_centerHorizontal="true"
+        />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtDontHaveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't have an account?"
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="575dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnLogin"/>
 
-    <Button
-        android:id="@+id/btnRegisterClient"
+
+    <TextView
+        android:id="@+id/txtRegisterClient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Regsiter as client"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="611dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Register as Client"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/txtDontHaveAccount"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:id="@+id/txtRegisterCook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register as Client"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/txtDontHaveAccount"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="230dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+
+
+</RelativeLayout>
