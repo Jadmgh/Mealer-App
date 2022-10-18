@@ -4,12 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterClient">
+    android:padding="16dp"
+    tools:context=".RegisterClient"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:layout_margin="22dp"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#0000"
+        android:textStyle="bold"></TextView>
+
+
+
+
 
     <EditText
         android:id="@+id/editFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="First name"
         android:inputType="textPersonName"
@@ -17,85 +33,110 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"/>
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp" />
+
 
     <EditText
         android:id="@+id/editLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Last Name"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editFirstName"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/editFirstName"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:layout_centerInParent="true"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editInputEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/editLastName"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_below="@id/editLastName"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editMakePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editInputEmail"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_below="@id/editInputEmail"
-        android:layout_marginTop="12dp"/>
+
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Address"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editCVV"
-        tools:layout_editor_absoluteX="103dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_below="@id/editMakePassword"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editCreditCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Credit Card"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editMakePassword"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_below="@id/editAddress"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editCVV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="CVV"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editCreditCard"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_below="@id/editCreditCard"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="15dp"
+        android:background="#FFFFFF"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/btnMakeClient"
