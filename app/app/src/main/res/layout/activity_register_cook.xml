@@ -40,8 +40,8 @@
         android:id="@+id/imgCheque"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="490dp"
+        tools:layout_editor_absoluteX="130dp"
+        tools:layout_editor_absoluteY="311dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText

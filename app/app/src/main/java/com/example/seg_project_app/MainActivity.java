@@ -21,17 +21,26 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.core.Tag;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView txtRegisterClient;
+    private TextView txtRegisterClient, txtRegisterCook;
 
     private EditText editEmail, editPassword;
     private Button btnLogin;
 
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+
+    private DatabaseReference reference;
+    private String userID;
+    private String userType;
 
 
     @Override
@@ -41,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         txtRegisterClient = (TextView) findViewById(R.id.txtRegisterClient);
         txtRegisterClient.setOnClickListener(this);
+        txtRegisterCook = (TextView) findViewById(R.id.txtRegisterCook);
+        txtRegisterCook.setOnClickListener(this);
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
@@ -63,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogin:
                 userLogin();
                 break;
+            case R.id.txtRegisterCook:
+                startActivity(new Intent(this, com.example.seg_project_app.RegisterCook.class));
 
         }
     }
@@ -114,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
                 else{
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -122,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.LENGTH_SHORT).show();
                     updateUI(null);
                     progressBar.setVisibility(View.GONE);
+                    //TODO: crashes when wrong sign in
                 }
             }
         });
@@ -130,12 +143,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     private void reload() {
-        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+        FirebaseUser user = mAuth.getCurrentUser();
+        updateUI(user);
     }
 
     private void updateUI(FirebaseUser user) {
 
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        userID = user.getUid();
+
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userProfile = snapshot.getValue(User.class);
+                userType = userProfile.type;
+                if (userType.equals("client")){
+                    startActivity(new Intent(MainActivity.this, ClientProfileActivity.class));
+                }
+                else if (userType.equals("administrator")){
+                    startActivity(new Intent(MainActivity.this, AdministratorProfileActivity.class));
+                }
+                else if(userType.equals("cook")){
+                    startActivity(new Intent(MainActivity.this, CookProfileActivity.class));
+                }
+                //TODO: if equals "cook" start coockProfile
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Something wrong happened", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
-
-
 }

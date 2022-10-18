@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".ClientProfileActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You are logged in"
+        android:layout_centerInParent="true"
+        android:text="You are logged in as a client!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="114dp"
-        android:layout_centerInParent="true"/>
+        tools:layout_editor_absoluteX="114dp" />
 
     <TextView
         android:id="@+id/txtSignOut"
