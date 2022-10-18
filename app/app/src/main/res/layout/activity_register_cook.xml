@@ -36,13 +36,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editLastName"
         tools:layout_editor_absoluteX="100dp" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/imgCheque"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="311dp"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:id="@+id/editAddress"
@@ -52,7 +45,7 @@
         android:hint="Address"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@+id/editMakePassword"
-        tools:layout_editor_absoluteX="103dp" />
+        tools:layout_editor_absoluteX="100dp" />
 
     <EditText
         android:id="@+id/editDescription"
@@ -62,7 +55,7 @@
         android:hint="Short Description"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@+id/editAddress"
-        tools:layout_editor_absoluteX="106dp" />
+        tools:layout_editor_absoluteX="100dp" />
 
     <EditText
         android:id="@+id/editMakePassword"
@@ -80,5 +73,30 @@
         android:layout_height="wrap_content"
         android:text="Make a cook account"
         app:layout_constraintTop_toBottomOf="@+id/editDescription"
-        tools:layout_editor_absoluteX="106dp" />
+        tools:layout_editor_absoluteX="103dp" />
+
+    <ImageView
+        android:id="@+id/imgCheque"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnMakeCook"
+        app:layout_constraintVertical_bias="0.255"
+        app:srcCompat="@drawable/questionmark" />
+
+    <TextView
+        android:id="@+id/txtCheque"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click on image to take a picture of your cheque"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgCheque"
+        app:layout_constraintVertical_bias="0.547" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -130,11 +130,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else{
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    Toast.makeText(MainActivity.this, "Authentication failed.",
+                    Toast.makeText(MainActivity.this, "Wrong password or email. Please try again!",
                             Toast.LENGTH_SHORT).show();
-                    updateUI(null);
                     progressBar.setVisibility(View.GONE);
-                    //TODO: crashes when wrong sign in
+                    editEmail.getText().clear();
+                    editPassword.getText().clear();
                 }
             }
         });
@@ -163,10 +163,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if (userType.equals("administrator")){
                     startActivity(new Intent(MainActivity.this, AdministratorProfileActivity.class));
                 }
-                else if(userType.equals("cook")){
+                else if(userType.equals("cook")) {
                     startActivity(new Intent(MainActivity.this, CookProfileActivity.class));
                 }
-                //TODO: if equals "cook" start coockProfile
             }
 
             @Override

@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -27,6 +29,7 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
 
     private EditText editFirstName, editLastName, editInputEmail, editMakePassword, editAddress, editDescription;
     private Button btnMakeCook;
+    private ImageView imgCheque;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,14 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
 
         btnMakeCook.setOnClickListener(this);
 
+        imgCheque = (ImageView) findViewById(R.id.imgCheque);
+        imgCheque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Toast.makeText(getApplicationContext(), "Lion", Toast.LENGTH_LONG).show();//display the text on image click event
+            }
+        });
+
     }
 
     @Override
@@ -64,6 +75,7 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
         String firstName = editFirstName.getText().toString().trim();
         String lastName = editLastName.getText().toString().trim();
         String description = editDescription.getText().toString().trim();
+        Drawable cheque = imgCheque.getDrawable();
 
         String address = editAddress.getText().toString().trim();
 
@@ -120,7 +132,7 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    User user = new Cook(firstName, lastName, email, password, address, description);
+                    User user = new Cook(firstName, lastName, email, password, address, description, cheque);
 
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
