@@ -30,11 +30,19 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
     private EditText editFirstName, editLastName, editInputEmail, editMakePassword, editAddress, editDescription;
     private Button btnMakeCook;
     private ImageView imgCheque;
+    private Button regcook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_cook);
+        regcook=findViewById(R.id.regcook);
+        regcook.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(RegisterCook.this, MainActivity.class);
+                startActivity(intent);
+            }});
 
         mAuth = FirebaseAuth.getInstance();
 

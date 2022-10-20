@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".RegisterClient"
-    >
+    android:background="@drawable/img">
+
 
     <TextView
+        android:id="@+id/txtclient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:layout_margin="22dp"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="#0000"
-        android:textStyle="bold"></TextView>
+        android:fontFamily="monospace"
+        android:text="Client Account"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp"
+        android:background="@drawable/custom_edittext">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/editLastName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_edittext"
+            android:ems="10"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:padding="8dp"
+            android:layout_centerInParent="true"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/cardview_dark_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
 
-
-
-
-    <EditText
+        <EditText
         android:id="@+id/editFirstName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:ems="10"
         android:hint="First name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/cardview_dark_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/custom_edittext"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
 
-    <EditText
-        android:id="@+id/editLastName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="textPersonName"
-        android:layout_below="@id/editFirstName"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:layout_centerInParent="true"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
+
 
     <EditText
         android:id="@+id/editInputEmail"
@@ -64,31 +89,19 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:layout_centerInParent="true"
         android:layout_below="@id/editLastName"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@drawable/custom_edittext"
+        android:textColorHighlight="@color/cardview_dark_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
-    <EditText
-        android:id="@+id/editMakePassword"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/editInputEmail"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editAddress"
@@ -99,12 +112,36 @@
         android:inputType="textPersonName"
         android:layout_centerInParent="true"
         android:layout_below="@id/editMakePassword"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
+        tools:layout_editor_absoluteX="100dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@drawable/custom_edittext"
+        android:textColorHighlight="@color/cardview_dark_background"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <EditText
+            android:id="@+id/editMakePassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/editInputEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteX="100dp"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:background="@drawable/custom_edittext"
+            android:textColorHighlight="@color/cardview_dark_background"
+            />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
     <EditText
         android:id="@+id/editCreditCard"
@@ -115,38 +152,60 @@
         android:inputType="textPersonName"
         android:layout_centerInParent="true"
         android:layout_below="@id/editAddress"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@drawable/custom_edittext"
+        android:textColorHighlight="@color/cardview_dark_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
     <EditText
         android:id="@+id/editCVV"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:minHeight="48dp"
         android:ems="10"
         android:hint="CVV"
         android:inputType="textPersonName"
         android:layout_centerInParent="true"
         android:layout_below="@id/editCreditCard"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp"/>
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@drawable/custom_edittext"
+        android:textColorHighlight="@color/cardview_dark_background"
+        />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
     <Button
         android:id="@+id/btnMakeClient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Make a client account"
+        android:layout_width="match_parent"
+        android:text="Make Client Account"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editAddress"
         tools:layout_editor_absoluteX="100dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/editCVV"
-        android:layout_marginTop="12dp"/>
-</RelativeLayout>
+        android:backgroundTint="@color/purple"
+        android:fontFamily="monospace"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"/>
+
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/regclient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple"
+        android:text="Back"
+        android:layout_gravity="left"
+        />
+</LinearLayout>

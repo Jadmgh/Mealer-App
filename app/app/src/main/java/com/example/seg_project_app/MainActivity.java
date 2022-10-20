@@ -2,9 +2,12 @@ package com.example.seg_project_app;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,10 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userType;
 
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         txtRegisterClient = (TextView) findViewById(R.id.txtRegisterClient);
         txtRegisterClient.setOnClickListener(this);

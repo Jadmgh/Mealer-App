@@ -23,14 +23,21 @@ public class RegisterClient extends AppCompatActivity implements View.OnClickLis
 
     private EditText editFirstName, editLastName, editInputEmail, editMakePassword, editAddress, editCreditCard, editCCV;
     private Button btnMakeClient;
+    private Button regclient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_client);
-
-        mAuth = FirebaseAuth.getInstance();
-
+        regclient=findViewById(R.id.regclient);
+        regclient.setOnClickListener(new View.OnClickListener(){
+                                  @Override
+                                  public void onClick(View v){
+                                      Intent intent = new Intent(RegisterClient.this, MainActivity.class);
+                                      startActivity(intent);
+                                  }});
+                mAuth = FirebaseAuth.getInstance();
         editFirstName= (EditText) findViewById(R.id.editFirstName);
         editLastName= (EditText) findViewById(R.id.editLastName);
         editInputEmail = (EditText) findViewById(R.id.editInputEmail);
