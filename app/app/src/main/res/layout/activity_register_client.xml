@@ -101,26 +101,6 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
-
-
-    <EditText
-        android:id="@+id/editAddress"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="Address"
-        android:inputType="textPersonName"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/editMakePassword"
-        tools:layout_editor_absoluteX="100dp"
-        android:drawablePadding="8dp"
-        android:padding="8dp"
-        android:background="@drawable/custom_edittext"
-        android:textColorHighlight="@color/cardview_dark_background"/>
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-
         <EditText
             android:id="@+id/editMakePassword"
             android:layout_width="match_parent"
@@ -142,6 +122,28 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
+
+
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:hint="Address"
+        android:inputType="textPersonName"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/editMakePassword"
+        tools:layout_editor_absoluteX="100dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@drawable/custom_edittext"
+        android:textColorHighlight="@color/cardview_dark_background"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+
+
 
     <EditText
         android:id="@+id/editCreditCard"
