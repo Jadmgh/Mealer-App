@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="monospace"
-                android:text="You are logged in as a client!"
+                android:text="You are logged in as an client!"
                 android:textAlignment="center"
                 android:textColor="@color/purple"
                 android:textSize="27sp"

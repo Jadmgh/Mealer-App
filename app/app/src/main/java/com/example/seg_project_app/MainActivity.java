@@ -46,13 +46,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userType;
 
 
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseAuth.getInstance().signOut();
 
         txtRegisterClient = (TextView) findViewById(R.id.txtRegisterClient);
         txtRegisterClient.setOnClickListener(this);
@@ -73,30 +72,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v){
+
         switch (v.getId()){
             case R.id.txtRegisterClient:
                 startActivity(new Intent(this, com.example.seg_project_app.RegisterClient.class));
                 break;
             case R.id.btnLogin:
-                userLogin();
+                requirementCheck();
                 break;
             case R.id.txtRegisterCook:
                 startActivity(new Intent(this, com.example.seg_project_app.RegisterCook.class));
-
+                break;
         }
     }
 
 
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            reload();
-        }
+        FirebaseAuth.getInstance().signOut();
+
+        //Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser != null){
+//            reload(currentUser);
+//        }
+
     }
 
-    private void userLogin() {
+    public void requirementCheck(){
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
 
@@ -123,7 +126,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editPassword.requestFocus();
             return;
         }
-
+        userLogin();
+    }
+    private void userLogin() {
+        String email = editEmail.getText().toString().trim();
+        String password = editPassword.getText().toString().trim();
         progressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -139,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "Wrong password or email. Please try again!",
                             Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
-                    editEmail.getText().clear();
                     editPassword.getText().clear();
                 }
             }
@@ -148,38 +154,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-    private void reload() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        updateUI(user);
-    }
-
     private void updateUI(FirebaseUser user) {
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
-
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User userProfile = snapshot.getValue(User.class);
-                userType = userProfile.type;
-                if (userType.equals("client")){
+                User user = snapshot.getValue(User.class);
+                userType = user.type;
+                if (userType.equals("client")) {
                     startActivity(new Intent(MainActivity.this, ClientProfileActivity.class));
-                }
-                else if (userType.equals("administrator")){
+                } else if (userType.equals("administrator")) {
                     startActivity(new Intent(MainActivity.this, AdministratorProfileActivity.class));
-                }
-                else if(userType.equals("cook")) {
+                } else if (userType.equals("cook")) {
                     startActivity(new Intent(MainActivity.this, CookProfileActivity.class));
                 }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Something wrong happened", Toast.LENGTH_LONG).show();
+
             }
         });
-
 
     }
 }

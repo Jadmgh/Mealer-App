@@ -37,12 +37,12 @@
         android:padding="20dp">
 
         <EditText
-            android:id="@+id/editLastName"
+            android:id="@+id/editFirstName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/custom_edittext"
             android:ems="10"
-            android:hint="Last Name"
+            android:hint="First name"
             android:inputType="textPersonName"
             android:padding="8dp"
             android:layout_centerInParent="true"
@@ -59,11 +59,11 @@
 
 
         <EditText
-        android:id="@+id/editFirstName"
+        android:id="@+id/editLastName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:ems="10"
-        android:hint="First name"
+        android:hint="Last name"
         android:inputType="textPersonName"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints"

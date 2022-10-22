@@ -2,14 +2,15 @@ package com.example.seg_project_app;
 
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.widget.ImageView;
 
 public class Cook extends User {
 
     public String firstName, lastName,email, password, address, description;
-    public Drawable cheque;
+   public Uri chequeUri;
 
-    public Cook(String firstName, String lastName, String email, String password, String address, String description, Drawable cheque) {
+    public Cook(String firstName, String lastName, String email, String password, String address, String description) {
         super(email, password, "cook");
         this.firstName = firstName;
         this.lastName = lastName;
@@ -17,12 +18,10 @@ public class Cook extends User {
         this.email = email;
         this.description = description;
         this.address = address;
-        this.cheque = cheque;
     }
 
-
-
+    public void setChequeUri(Uri uri) {
+        chequeUri = uri;
+    }
 
 }
-//TODO: class cook
-//TODO: figure out image for cheque
