@@ -20,8 +20,8 @@ public class Cook extends User {
         this.address = address;
     }
 
-    public void setChequeUri(Uri uri) {
-        chequeUri = uri;
-    }
+//    public void setChequeUri(Uri uri) {
+//        chequeUri = uri;
+//    }
 
 }
