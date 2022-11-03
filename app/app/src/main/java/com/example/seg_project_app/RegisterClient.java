@@ -207,40 +207,42 @@ public class RegisterClient extends AppCompatActivity implements View.OnClickLis
 //                        }
 //                    });
 //            if (newUser == true) {
+
+//        if (verifiedInfo == true) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-//                            int creditCardNumber = Integer.parseInt(creditCard);
-//                            int cvvNumber = Integer.parseInt(CVV);
-                            User user = new Client(firstName, lastName, email, password, address, creditCard, CVV, mAuth.getCurrentUser().getUid());
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    User user = new Client(firstName, lastName, email, password, address, creditCard,CVV, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(RegisterClient.this, "You have succsefully been registered as a client", Toast.LENGTH_LONG).show();
-                                                startActivity(new Intent(RegisterClient.this, MainActivity.class));
+                    FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(RegisterClient.this, "You have successfully been registered as a client", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(RegisterClient.this, MainActivity.class));
 
-                                            } else {
-                                                Toast.makeText(RegisterClient.this, "Failed to register client. Try again!", Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(RegisterClient.this, "Failed to register client", Toast.LENGTH_LONG).show();
-                        }
+                                    } else {
+                                        Toast.makeText(RegisterClient.this, "Failed to register client. Try again!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(RegisterClient.this, "Failed to register client", Toast.LENGTH_LONG).show();
+                }
+            }
 
-                    }
+        });
+    }
 
-                });
+
 //            } else {
 //                Toast.makeText(this, "Account with that email already exists", Toast.LENGTH_LONG).show();
 //                editInputEmail.getText().clear();
 //            }
 //        }
-    }
+
 
     public static boolean isNumeric(String str) {
         if (str == null) {

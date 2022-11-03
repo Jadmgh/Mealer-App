@@ -42,15 +42,97 @@ public class ComplaintView extends AppCompatActivity implements View.OnClickList
         btnTempBan = (Button) findViewById(R.id.btnTempBan);
         btnPermanentlyBan = (Button) findViewById(R.id.btnPermanentlyBan);
 
+        btnPermanentlyBan.setOnClickListener(this);
+        btnDismiss.setOnClickListener(this);
+        btnTempBan.setOnClickListener(this);
+        Intent intent = getIntent();
+        String[] complaintName = intent.getStringArrayExtra("complaintInfo");
+
+        complaint = new Complaint(complaintName[0],complaintName[1],complaintName[2],complaintName[3]);
+        setInfoText();
     }
 
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.btnDismiss:
+                dismissComplaint();
+                return;
+            case R.id.btnPermanentlyBan:
+                permanentlyBanCook();
+                return;
+            case R.id.btnTempBan:
+                temporarilyBanCook();
+                return;
+        }
     }
 
 
+    private void setInfoText() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(complaint.clientUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                String clientName = snapshot.child("firstName").getValue().toString()+snapshot.child("lastName").getValue().toString();
+                reference.child(complaint.cookUID).addValueEventListener(new ValueEventListener() {
 
-}
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        cook = new Cook(snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(),snapshot.child("password").getValue().toString(),snapshot.child("address").getValue().toString(),
+                                snapshot.child("description").getValue().toString(),snapshot.child("userID").getValue().toString(),snapshot.child("permanentlyBanned").getValue().toString(),snapshot.child("tempBanned").getValue().toString(),snapshot.child("unbanDate").getValue().toString());
+                        String cookName = snapshot.child("firstName").getValue().toString()+snapshot.child("lastName").getValue().toString();
+                        txtClient.setText(clientName);
+                        txtCook.setText(cookName);
+                        txtDescription.setText(complaint.description);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void permanentlyBanCook() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(complaint.cookUID).child("permanentlyBanned").setValue("true");
+        dismissComplaint();
+    }
+
+    public void temporarilyBanCook() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(complaint.cookUID).child("tempBanned").setValue("true");
+        try {
+            int numberOfDays = Integer.parseInt(editNumberOfDays.getText().toString());
+            Calendar c = Calendar.getInstance();
+            c.setTime(Calendar.getInstance().getTime());
+            c.add(Calendar.DATE,numberOfDays);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            String unbanDate= dateFormat.format(c.getTime());
+
+            reference.child(complaint.cookUID).child("permanentlyBanned").setValue("true");
+            reference.child(complaint.cookUID).child("unbanDate").setValue(unbanDate);
+            dismissComplaint();
+        }
+        catch (Exception e){
+            Toast.makeText(this, "Please input number of days", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void dismissComplaint() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("Complaints").child(complaint.complaintName).removeValue();
+        startActivity(new Intent(ComplaintView.this, AdministratorProfileActivity.class));
+    }
+
+};

@@ -1,70 +1,144 @@
+//package com.example.seg_project_app;
+//
+//import android.graphics.drawable.Drawable;
+//import android.media.Image;
+//import android.net.Uri;
+//import android.widget.ImageView;
+//
+//import java.text.SimpleDateFormat;
+//import java.util.Calendar;
+//import java.util.Date;
+//
+//public class Cook extends User {
+//
+//
+//    public String firstName, lastName,email, password, address, description;
+//    public Uri chequeUri;
+//    private Boolean banned, tempBanned;
+//    private Date unbanDate;
+//
+//    public Cook(String firstName, String lastName, String email, String password, String address, String description) {
+//        super(email, password, "cook");
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.password = password;
+//        this.email = email;
+//        this.description = description;
+//        this.address = address;
+//    }
+//
+////    public void setChequeUri(Uri uri) {
+////        chequeUri = uri;
+////    }
+//
+//
+//    public Boolean isPermanentlyBanned(){
+//        return banned;
+//    }
+//
+//    public boolean isTempBanned(){
+//        return tempBanned;
+//    }
+//
+//    public String getUnbanDateAsString(){
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//        String date = dateFormat.format(unbanDate);
+//        return date;
+//    }
+//
+//    public void banCook(){
+//        banned = true;
+//    }
+//
+//    public void tempBanCook(int numberOfDays){
+//        tempBanned=true;
+//        Calendar c = Calendar.getInstance();
+//        c.setTime(Calendar.getInstance().getTime());
+//        c.add(Calendar.DATE,numberOfDays);
+//        unbanDate = c.getTime();    //gets date after numberOfDays date //TODO: test calendar +
+//    }
+//
+//    public void signIn(){
+//        //TODO: move sign In to cook, when sign in, check if unbanned
+////        CookProfileActivity newActivity = new CookProfileActivity(this);
+//    }
+//}
+
 package com.example.seg_project_app;
 
-import static androidx.core.content.ContextCompat.startActivity;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
-import android.widget.ImageView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Cook extends User {
 
-    public String firstName, lastName, address, description,userID;
-    public Uri chequeUri;
-    private Boolean banned, tempBanned;
-    private Date unbanDate;
+    public String firstName, lastName, address, description, permanentlyBanned, tempBanned, unbanDate;
 
-    public Cook(String firstName, String lastName, String email, String password, String address, String description,String userID) {
-        super(email, password, "cook", userID);
+    public Cook(){
+    }
+    public Cook(String firstName, String lastName, String email, String password, String address, String description, String userID, String permanentlyBanned, String tempBanned, String unbanDate){
+        super(email,password,"cook", userID);
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.description = description;
         this.address = address;
-        banned = false;
-        tempBanned = false;
-        unbanDate =null;
+        this.description = description;
+
+        this.permanentlyBanned = permanentlyBanned;
+        this.tempBanned = tempBanned;
+        this.unbanDate = unbanDate;
     }
 
-//    public void setChequeUri(Uri uri) {
-//        chequeUri = uri;
-//    }
-
     public Boolean isPermanentlyBanned(){
-        return banned;
+        if (permanentlyBanned.equals( "true")){
+            return true;
+        }
+        return false;
     }
 
     public boolean isTempBanned(){
-        return tempBanned;
+        if (tempBanned.equals("true")){
+            return  true;
+        }
+        return false;
     }
 
     public String getUnbanDateAsString(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        String date = dateFormat.format(unbanDate);
+
+        return unbanDate;
+    }
+
+    public Date getUnbanDateAsDate(){
+        Date date = null;
+        try {
+            SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MMM-yyyy");
+            date = formatter2.parse(unbanDate);
+        }
+        catch (Exception e){
+            //TODO: exception handle for date parse
+        }
         return date;
     }
 
-    public void banCook(){
-        banned = true;
-    }
-
-    public void tempBanCook(int numberOfDays){
-        tempBanned=true;
+    public boolean isStillBanned(){
         Calendar c = Calendar.getInstance();
-        c.setTime(Calendar.getInstance().getTime());
-        c.add(Calendar.DATE,numberOfDays);
-        unbanDate = c.getTime();    //gets date after numberOfDays date //TODO: test calendar +
+        Date currentDate = c.getTime();
+        if (getUnbanDateAsDate().after(currentDate)){
+            return true;
+        }
+        return false;
     }
 
-//    public void signIn(Intent intent){
-//        //TODO: move sign In to cook, when sign in, check if unbanned
-//        CookProfileActivity newActivity = new CookProfileActivity(this);
-//        startActivity(new Intent(Cook.this.getActivity(), CookProfileActivity.class));
-//    }
+
+    public void unbanCook() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(userID).child("unbanDate").setValue("");
+        reference.child(userID).child("tempBanned").setValue("false");
+    }
+
 }

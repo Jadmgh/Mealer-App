@@ -8,15 +8,19 @@ public class User {
 
     public String email, password, type, userID;
 
+    //    public String userID;
     public User(){
 
     }
 
-    public User(String email, String password, String type, String userID){
+    public User(String email, String password, String type,String userID){
         this.email = email;
         this.password = password;
         this.type = type;
         this.userID = userID;
     }
 
+    public String toString(){
+        return email + password+type;
+    }
 }
