@@ -213,7 +213,7 @@ public class RegisterClient extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
 //                            int creditCardNumber = Integer.parseInt(creditCard);
 //                            int cvvNumber = Integer.parseInt(CVV);
-                            User user = new Client(firstName, lastName, email, password, address, creditCard, CVV);
+                            User user = new Client(firstName, lastName, email, password, address, creditCard, CVV, mAuth.getCurrentUser().getUid());
 
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {

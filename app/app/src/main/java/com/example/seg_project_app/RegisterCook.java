@@ -208,16 +208,14 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        User user = new Cook(firstName, lastName, email, password, address, description);
-
+                        User user = new Cook(firstName, lastName, email, password, address, description, FirebaseAuth.getInstance().getCurrentUser().getUid());
                         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(RegisterCook.this, "You have succsefully been registered as a cook", Toast.LENGTH_LONG).show();
-                                            startActivity(new Intent(RegisterCook.this, MainActivity.class));
-
+                                            startActivity(new Intent(RegisterCook.this,CookProfileActivity.class));
                                         } else {
                                             Toast.makeText(RegisterCook.this, "Failed to register cook. Try again!", Toast.LENGTH_LONG).show();
                                         }

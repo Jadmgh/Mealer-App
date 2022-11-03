@@ -128,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         userLogin();
     }
+
+
     private void userLogin() {
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
@@ -156,9 +158,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void updateUI(FirebaseUser user) {
 
-        reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
-        reference.child(userID).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
@@ -166,9 +167,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (userType.equals("client")) {
                     startActivity(new Intent(MainActivity.this, ClientProfileActivity.class));
                 } else if (userType.equals("administrator")) {
-                    startActivity(new Intent(MainActivity.this, AdministratorProfileActivity.class));
+                    Intent i = new Intent(MainActivity.this, AdministratorProfileActivity.class);
+                    String[] userValues= {snapshot.child("email").getValue().toString(), snapshot.child("email").getValue().toString(),snapshot.child("userID").getValue().toString()};
+                    i.putExtra("userValue", userValues);
+                    startActivity(i);
                 } else if (userType.equals("cook")) {
-                    startActivity(new Intent(MainActivity.this, CookProfileActivity.class));
+                    Intent i = new Intent(MainActivity.this, CookProfileActivity.class);
+                    String[] userValues= {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString()
+                            ,snapshot.child("password").getValue().toString(),snapshot.child("address").getValue().toString(),snapshot.child("description").getValue().toString(),snapshot.child("userID").getValue().toString()};
+                    i.putExtra("userValue", userValues);
+                    startActivity(i);
                 }
 
             }
