@@ -37,11 +37,13 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         cook = new Cook(userValues[0], userValues[1], userValues[2], userValues[3], userValues[4],
                 userValues[5], userValues[6], userValues[7], userValues[8], userValues[9]);
         if (cook.tempBanned.equals("true")) {
-            if (cook.isStillBanned()){
+            if (cook.pastUnbanDate()){
                 text.setText(cook.firstName + " " + cook.lastName + ", you are temporarily banned from this app. You will be unbanned on " + cook.getUnbanDateAsString());
             }
             else{
-                cook.unbanCook();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                reference.child(cook.userID).child("unbanDate").setValue("");
+                reference.child(cook.userID).child("tempBanned").setValue("false");
                 text.setText("Hello, " + cook.firstName + " ,you are a cook");
             }
         } else if (cook.permanentlyBanned.equals("true")) {

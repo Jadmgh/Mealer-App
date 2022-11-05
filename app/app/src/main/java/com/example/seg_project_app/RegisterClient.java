@@ -28,6 +28,9 @@ public class RegisterClient extends AppCompatActivity implements View.OnClickLis
 
     private boolean newUser;
 
+    public RegisterClient(){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,12 +255,18 @@ public class RegisterClient extends AppCompatActivity implements View.OnClickLis
             Double.parseDouble(str);
             return true;
         } catch (NumberFormatException nfe) {
+
             return false;
         }
     }
 
     public boolean isAlpha(String name) {
+
         return name.matches("[a-zA-Z]+");
+    }
+
+    public boolean testing(){
+        return true;
     }
 
 }

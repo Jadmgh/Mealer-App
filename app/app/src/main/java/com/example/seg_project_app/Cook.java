@@ -67,10 +67,6 @@
 package com.example.seg_project_app;
 
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -120,12 +116,11 @@ public class Cook extends User {
             date = formatter2.parse(unbanDate);
         }
         catch (Exception e){
-            //TODO: exception handle for date parse
         }
         return date;
     }
 
-    public boolean isStillBanned(){
+    public boolean pastUnbanDate(){
         Calendar c = Calendar.getInstance();
         Date currentDate = c.getTime();
         if (getUnbanDateAsDate().after(currentDate)){
@@ -134,11 +129,28 @@ public class Cook extends User {
         return false;
     }
 
-
+    public void tempBan(int numberOfDays){
+        Calendar c = Calendar.getInstance();
+        c.setTime(Calendar.getInstance().getTime());
+        c.add(Calendar.DATE,numberOfDays);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        unbanDate= dateFormat.format(c.getTime());
+        tempBanned = "true";
+    }
     public void unbanCook() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.child(userID).child("unbanDate").setValue("");
-        reference.child(userID).child("tempBanned").setValue("false");
+        tempBanned= "false";
+        permanentlyBanned = "false";
+    }
+
+    public void permanentlyBanCook(){
+        permanentlyBanned = "true";
+    }
+
+    public boolean isPermanentlyAndTemporarilyBanned(){
+        if (permanentlyBanned == "true"&& tempBanned == "true"){
+            return true;
+        }
+        return false;
     }
 
 }
