@@ -112,16 +112,18 @@ public class ComplaintView extends AppCompatActivity implements View.OnClickList
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.child(complaint.cookUID).child("tempBanned").setValue("true");
         try {
-            int numberOfDays = Integer.parseInt(editNumberOfDays.getText().toString());
-            Calendar c = Calendar.getInstance();
-            c.setTime(Calendar.getInstance().getTime());
-            c.add(Calendar.DATE,numberOfDays);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-            String unbanDate= dateFormat.format(c.getTime());
+            if (editNumberOfDays.getText()!= null) {
+                int numberOfDays = Integer.parseInt(editNumberOfDays.getText().toString());
+                Calendar c = Calendar.getInstance();
+                c.setTime(Calendar.getInstance().getTime());
+                c.add(Calendar.DATE, numberOfDays);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                String unbanDate = dateFormat.format(c.getTime());
 
-            reference.child(complaint.cookUID).child("permanentlyBanned").setValue("true");
-            reference.child(complaint.cookUID).child("unbanDate").setValue(unbanDate);
-            dismissComplaint();
+                reference.child(complaint.cookUID).child("permanentlyBanned").setValue("true");
+                reference.child(complaint.cookUID).child("unbanDate").setValue(unbanDate);
+                dismissComplaint();
+            }
         }
         catch (Exception e){
             Toast.makeText(this, "Please input number of days", Toast.LENGTH_SHORT).show();
