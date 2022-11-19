@@ -227,13 +227,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:orientation="horizontal"
+                android:orientation="vertical"
 
                 >
 
-                <Space
-                    android:layout_width="15dp"
-                    android:layout_height="5dp" />
+
 
 
                 <Button
@@ -270,4 +268,13 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple"
+        android:text="Back"
+        android:layout_gravity="left"
+        />
 </LinearLayout>

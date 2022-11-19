@@ -194,5 +194,10 @@
                 android:backgroundTint="@color/purple"
                 android:layout_gravity="center"/>
         </LinearLayout>
+
+
     </androidx.cardview.widget.CardView>
+
+
+
 </LinearLayout>
