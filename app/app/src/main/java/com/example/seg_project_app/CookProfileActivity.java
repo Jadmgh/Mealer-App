@@ -423,7 +423,16 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealDescription.setText(meal.mealDescription);
         String ingredients = "";
 
+        for (int i = 0; i < meal.ingredients.size(); i++) {
+            if (i+1 == meal.ingredients.size()) {
+                ingredients = ingredients + meal.ingredients.get(i) ;
+            }
+            else {
+                ingredients = ingredients + meal.ingredients.get(i) + ",";
+            }
+        }
 
+        mealIngredients.setText(ingredients);
         btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -436,7 +445,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         btnAddMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addMealToOfferedMeals(meal);        //TODO: check if this works
+                addMealToOfferedMeals(meal);
                 dialog.dismiss();
             }
         });
@@ -444,7 +453,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         btnDeleteMealFromMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                deleteMealFromMenu(meal);       //TODO: check if delete works
+                deleteMealFromMenu(meal);
             }
         });
     }
@@ -457,14 +466,14 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
         mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
         mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
-        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
+//        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
         mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
         mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
 
         mealName.setText(meal.mealName);
         mealType.setText(meal.mealType);
         mealCuisine.setText(meal.mealCuisine);
-        mealAllergens.setText(meal.mealAllergens);
+//        mealAllergens.setText(meal.mealAllergens);
         mealPrice.setText(meal.mealPrice);
         mealDescription.setText(meal.mealDescription);
         String ingredients = "";
@@ -529,20 +538,35 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addMealToOfferedMeals(Meal meal){
-        //TODO: check if meal already exists
-        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).setValue(meal)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(CookProfileActivity.this, "You have successfully added meal to offered meals", Toast.LENGTH_LONG).show();
+        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).setValue(meal)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(CookProfileActivity.this, "You have successfully added meal to offered meals", Toast.LENGTH_LONG).show();
 
-                        } else {
-                            Toast.makeText(CookProfileActivity.this, "Failed to add meal to offered meals!", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-        getOfferedMealsFromFirebase();
+                                    } else {
+                                        Toast.makeText(CookProfileActivity.this, "Failed to add meal to offered meals!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                    getOfferedMealsFromFirebase();
+                }
+                else {
+                    Toast.makeText(CookProfileActivity.this, "Cannot offer meal from menu since it is already offered", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CookProfileActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void deleteMealFromOfferedMeals(Meal meal){

@@ -107,12 +107,31 @@ public class ComplaintView extends AppCompatActivity implements View.OnClickList
         reference.child(complaint.cookUID).child("permanentlyBanned").setValue("true");
         dismissComplaint();
     }
+    public boolean isNumeric(String characters){
+        if (characters == null) {
+            return false;
+        }
+        try {
+            Double.parseDouble(characters);
+            return true;
+        } catch (NumberFormatException nfe) {
+
+            return false;
+        }
+    }
 
     public void temporarilyBanCook() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.child(complaint.cookUID).child("tempBanned").setValue("true");
         try {
             if (editNumberOfDays.getText()!= null) {
+                if (this.isNumeric(editNumberOfDays.getText().toString())== false){
+
+                    editNumberOfDays.setError("must be a numeric value");
+                    editNumberOfDays.requestFocus();
+                    return;
+
+                }
                 int numberOfDays = Integer.parseInt(editNumberOfDays.getText().toString());
                 Calendar c = Calendar.getInstance();
                 c.setTime(Calendar.getInstance().getTime());
