@@ -27,6 +27,16 @@
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="monospace"
+        android:text="You are logged in as a cook!"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
