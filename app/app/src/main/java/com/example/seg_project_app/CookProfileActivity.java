@@ -3,6 +3,7 @@ package com.example.seg_project_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,19 +30,38 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     private TextView txtSignOut;
     private TextView text;
     public  Cook cook;
+    private Button btnCreateMeal;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients;
+    public EditText editMealName, editMealType,editCuisineType,editAllergens, editMealPrice, editMealDescription, editIngredients;
+    public Button btnMakeMeal, btnAddMeal,btnDeleteMealFromMenu, btnDeleteMealFromAllMenus, btnDeleteMealFromOffered;
+
+    public ListView menuListView, offeredMealsListView;
     public ArrayList<Meal> menuList, offeredMealsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cook_profile);
+        setContentView(R.layout.activity_cook_profile_temp);
         text = (TextView) findViewById(R.id.textView);
+
+        btnCreateMeal = (Button) findViewById(R.id.btnCreateMeal);
+        btnCreateMeal.setOnClickListener(this);
+
+        menuListView = (ListView) findViewById(R.id.menuList);
+        offeredMealsListView = (ListView) findViewById(R.id.offeredMealsList);
+
+        menuList = new ArrayList<Meal>();
+        offeredMealsList = new ArrayList<Meal>();
 
         Intent intent = getIntent();
 
         String[] userValues = intent.getStringArrayExtra("userInfo");
         cook = new Cook(userValues[0], userValues[1], userValues[2], userValues[3], userValues[4],
                 userValues[5], userValues[6], userValues[7], userValues[8], userValues[9]);
+
         if (cook.tempBanned.equals("true")) {
             if (cook.pastUnbanDate()){
                 text.setText(cook.firstName + " " + cook.lastName + ", you are temporarily banned from this app. You will be unbanned on " + cook.getUnbanDateAsString());
@@ -62,6 +82,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             getOfferedMealsFromFirebase();
 
         }
+
         txtSignOut = (TextView) findViewById(R.id.txtSignOut);
         txtSignOut.setOnClickListener(this);
     }
@@ -122,12 +143,49 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.txtSignOut:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(CookProfileActivity.this, MainActivity.class));
                 return;
+            case R.id.btnCreateMeal:
+                createNewMealDialog();
+                getMenuFromFirebase();
+                return;
         }
+    }
 
+    public void createNewMealDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_create_meal,null);
+        editMealName = (EditText) mealPopupView.findViewById(R.id.editMealName);
+        editMealType = (EditText) mealPopupView.findViewById(R.id.editMealType);
+        editCuisineType = (EditText) mealPopupView.findViewById(R.id.editCuisineType);
+        editAllergens = (EditText) mealPopupView.findViewById(R.id.editAllergens);
+        editMealPrice = (EditText) mealPopupView.findViewById(R.id.editMealPrice);
+        editMealDescription = (EditText) mealPopupView.findViewById(R.id.editMealDescription);
+        editIngredients = (EditText) mealPopupView.findViewById(R.id.editIngredients);
+
+        btnMakeMeal = (Button) mealPopupView.findViewById(R.id.btnMakeMeal);
+
+        dialogBuilder.setView(mealPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        btnMakeMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                ArrayList<String> ingredients = new ArrayList<String>();
+                String[] ingredientsArray = editIngredients.getText().toString().split(",");
+                for (int i = 0; i < ingredientsArray.length; i++) {
+                    ingredients.add(ingredientsArray[i]);
+                }
+                //TODO: check if all inputs are right
+                //TODO: add meal to menu
+                dialog.dismiss();
+            }
+        });
     }
 }
