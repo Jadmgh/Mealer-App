@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -177,18 +179,37 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View view) {
 
 
+
                 ArrayList<String> ingredients = new ArrayList<String>();
                 String[] ingredientsArray = editIngredients.getText().toString().split(",");
                 for (int i = 0; i < ingredientsArray.length; i++) {
                     ingredients.add(ingredientsArray[i]);
                 }
-                //TODO: check if all inputs are right
-                //TODO: add meal to menu
-                dialog.dismiss();
+                if (requirementsForInput(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients) == true) {
+
+                    Meal meal = new Meal(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients);
+                    addMealToMenu(meal);
+                    dialog.dismiss();
+                }
             }
         });
     }
 
+    public void addMealToMenu(Meal meal){
+        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(meal.mealName).setValue(meal)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(CookProfileActivity.this, "You have successfully added meal to menu", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(CookProfileActivity.this, "Failed to add meal to menu!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        getMenuFromFirebase();
+    }
     public void openMealNotOfferedFromDatabase(String mealName){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(mealName);
@@ -257,4 +278,114 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+
+    public boolean requirementsForInput(String mealName, String mealType, String mealCuisine, String mealAllergens,
+                                        String mealDescription,String mealPrice, ArrayList<String> ingredients )
+    {
+
+        if(mealName.isEmpty()){
+            editMealName.setError("Meal name required");
+            editMealName.requestFocus();
+            return false;
+        }
+        else if(this.hasNumeric(mealName)){
+            editMealName.setError("Only characters are allowed");
+            editMealName.requestFocus();
+            return false;
+        }
+
+        if(mealType.isEmpty()){
+            editMealType.setError("Meal type is required");
+            editMealType.requestFocus();
+            return false;
+        }
+        else if(this.hasNumeric(mealType)){
+            editMealType.setError("Only characters are allowed");
+            editMealType.requestFocus();
+            return false;
+        }
+
+        if(mealCuisine.isEmpty()){
+            editCuisineType.setError("Cuisine type is required");
+            editCuisineType.requestFocus();
+            return false;
+
+        }
+        else if(this.hasNumeric(mealCuisine)){
+            editCuisineType.setError("Only characters are allowed");
+            editCuisineType.requestFocus();
+            return false;
+        }
+
+
+        if(mealAllergens.isEmpty()){
+            editAllergens.setError("Allergens required");
+            editAllergens.requestFocus();
+            return false;
+        }
+        else if(this.hasNumeric(mealAllergens)){
+            editAllergens.setError("Only characters are allowed");
+            editAllergens.requestFocus();
+            return false;
+        }
+
+        if(mealDescription.isEmpty()){
+            editMealDescription.setError("Description required");
+            editMealDescription.requestFocus();
+            return false;
+        }
+        else if(this.hasNumeric(mealDescription)){
+            editMealDescription.setError("Only characters are allowed");
+            editMealDescription.requestFocus();
+            return false;
+        }
+
+        if(mealPrice.isEmpty()){
+            editMealPrice.setError("Price is required");
+            editMealPrice.requestFocus();
+            return false;
+        }
+        if(this.isNumeric(mealPrice) == false){
+            editMealPrice.setError("price is numbers only");
+            editMealPrice.requestFocus();
+            return false;
+        }
+
+        for(int i = 0; i < ingredients.size(); i++){
+            if(this.hasNumeric(ingredients.get(i))){
+                editIngredients.setError("Only characters are allowed");
+                editIngredients.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean isNumeric(String characters){
+        if (characters == null) {
+            return false;
+        }
+        try {
+            Double.parseDouble(characters);
+            return true;
+        } catch (NumberFormatException nfe) {
+
+            return false;
+        }
+    }
+    public boolean hasNumeric(String characters){
+
+        char[] chars = characters.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
 }
