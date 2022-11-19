@@ -68,6 +68,7 @@ package com.example.seg_project_app;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -120,6 +121,7 @@ public class Cook extends User {
         return date;
     }
 
+
     public boolean pastUnbanDate(){
         Calendar c = Calendar.getInstance();
         Date currentDate = c.getTime();
@@ -140,6 +142,26 @@ public class Cook extends User {
     public void unbanCook() {
         tempBanned= "false";
         permanentlyBanned = "false";
+    }
+    public ArrayList<String> stringToArrayList(String ingredientsString){
+        ArrayList<String> ingredients = new ArrayList<String>();
+        String[] ingredientsArray = ingredientsString.split(",");
+        for (int i = 0; i < ingredientsArray.length; i++) {
+            ingredients.add(ingredientsArray[i]);
+        }
+        return ingredients;
+    }
+    public String ingredientsToString(ArrayList<String> newingredients){
+        String ingredients = "";
+        for (int i = 0; i < newingredients.size(); i++) {
+            if (i+1 == newingredients.size()) {
+                ingredients = ingredients + newingredients.get(i) ;
+            }
+            else {
+                ingredients = ingredients + newingredients.get(i) + ",";
+            }
+        }
+        return ingredients;
     }
 
     public void permanentlyBanCook(){

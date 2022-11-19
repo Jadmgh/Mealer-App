@@ -42,6 +42,8 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     public ListView menuListView, offeredMealsListView;
     public ArrayList<Meal> menuList, offeredMealsList;
 
+    public CookProfileActivity(){
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +151,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                 //Requirements check
 
 
-                ArrayList<String> ingredients = new ArrayList<String>();
-                String[] ingredientsArray = editIngredients.getText().toString().split(",");
-                for (int i = 0; i < ingredientsArray.length; i++) {
-                    ingredients.add(ingredientsArray[i]);
-                }
+                ArrayList<String> ingredients = stringToArrayList(editIngredients.getText().toString());
                 if (requirementsForInput(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients) == true) {
 
                     Meal meal = new Meal(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients);
@@ -185,13 +183,15 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     public boolean requirementsForInput(String mealName, String mealType, String mealCuisine, String mealAllergens,
                                         String mealDescription,String mealPrice, ArrayList<String> ingredients )
     {
+        Meal meal = new Meal( mealName,  mealType,  mealCuisine, mealAllergens,
+                 mealDescription,mealPrice, ingredients);
 
         if(mealName.isEmpty()){
             editMealName.setError("Meal name required");
             editMealName.requestFocus();
             return false;
         }
-        else if(this.hasNumeric(mealName)){
+        else if(meal.hasNumeric(mealName)){
             editMealName.setError("Only characters are allowed");
             editMealName.requestFocus();
             return false;
@@ -202,7 +202,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             editMealType.requestFocus();
             return false;
         }
-        else if(this.hasNumeric(mealType)){
+        else if(meal.hasNumeric(mealType)){
             editMealType.setError("Only characters are allowed");
             editMealType.requestFocus();
             return false;
@@ -214,7 +214,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             return false;
 
         }
-        else if(this.hasNumeric(mealCuisine)){
+        else if(meal.hasNumeric(mealCuisine)){
             editCuisineType.setError("Only characters are allowed");
             editCuisineType.requestFocus();
             return false;
@@ -226,7 +226,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             editAllergens.requestFocus();
             return false;
         }
-        else if(this.hasNumeric(mealAllergens)){
+        else if(meal.hasNumeric(mealAllergens)){
             editAllergens.setError("Only characters are allowed");
             editAllergens.requestFocus();
             return false;
@@ -237,7 +237,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             editMealDescription.requestFocus();
             return false;
         }
-        else if(this.hasNumeric(mealDescription)){
+        else if(meal.hasNumeric(mealDescription)){
             editMealDescription.setError("Only characters are allowed");
             editMealDescription.requestFocus();
             return false;
@@ -248,7 +248,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             editMealPrice.requestFocus();
             return false;
         }
-        if(this.isNumeric(mealPrice) == false){
+        if(meal.isNumeric(mealPrice) == false){
             editMealPrice.setError("price is numbers only");
             editMealPrice.requestFocus();
             return false;
@@ -260,7 +260,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             return false;
         }
         for(int i = 0; i < ingredients.size(); i++){
-            if(this.hasNumeric(ingredients.get(i))){
+            if(meal.hasNumeric(ingredients.get(i))){
                 editIngredients.setError("Only characters are allowed");
                 editIngredients.requestFocus();
                 return false;
@@ -271,29 +271,29 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public boolean isNumeric(String characters){
-        if (characters == null) {
-            return false;
-        }
-        try {
-            Double.parseDouble(characters);
-            return true;
-        } catch (NumberFormatException nfe) {
-
-            return false;
-        }
-    }
-    public boolean hasNumeric(String characters){
-
-        char[] chars = characters.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for(char c : chars){
-            if(Character.isDigit(c)){
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean isNumeric(String characters){
+//        if (characters == null) {
+//            return false;
+//        }
+//        try {
+//            Double.parseDouble(characters);
+//            return true;
+//        } catch (NumberFormatException nfe) {
+//
+//            return false;
+//        }
+//    }
+//    public boolean hasNumeric(String characters){
+//
+//        char[] chars = characters.toCharArray();
+//        StringBuilder sb = new StringBuilder();
+//        for(char c : chars){
+//            if(Character.isDigit(c)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public void getMenuFromFirebase(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu");
@@ -424,16 +424,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealAllergens.setText(meal.mealAllergens);
         mealPrice.setText(meal.mealPrice);
         mealDescription.setText(meal.mealDescription);
-        String ingredients = "";
-
-        for (int i = 0; i < meal.ingredients.size(); i++) {
-            if (i+1 == meal.ingredients.size()) {
-                ingredients = ingredients + meal.ingredients.get(i) ;
-            }
-            else {
-                ingredients = ingredients + meal.ingredients.get(i) + ",";
-            }
-        }
+        String ingredients = cook.ingredientsToString(meal.ingredients);
 
         mealIngredients.setText(ingredients);
         btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
@@ -479,17 +470,9 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 //        mealAllergens.setText(meal.mealAllergens);
         mealPrice.setText(meal.mealPrice);
         mealDescription.setText(meal.mealDescription);
-        String ingredients = "";
+        String ingredients = ingredientsToString(meal.ingredients);
         btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
 
-        for (int i = 0; i < meal.ingredients.size(); i++) {
-            if (i+1 == meal.ingredients.size()) {
-                ingredients = ingredients + meal.ingredients.get(i) ;
-            }
-            else {
-                ingredients = ingredients + meal.ingredients.get(i) + ",";
-            }
-        }
         mealIngredients.setText(ingredients);
 
         btnDeleteMealFromOffered = (Button) mealPopupView.findViewById(R.id.btnDeleteFromOffered);
@@ -514,7 +497,27 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    public ArrayList<String> stringToArrayList(String ingredientsString){
+        ArrayList<String> ingredients = new ArrayList<String>();
+        String[] ingredientsArray = ingredientsString.split(",");
+        for (int i = 0; i < ingredientsArray.length; i++) {
+            ingredients.add(ingredientsArray[i]);
+        }
+        return ingredients;
+    }
 
+    public String ingredientsToString(ArrayList<String> newingredients){
+        String ingredients = "";
+        for (int i = 0; i < newingredients.size(); i++) {
+            if (i+1 == newingredients.size()) {
+                ingredients = ingredients + newingredients.get(i) ;
+            }
+            else {
+                ingredients = ingredients + newingredients.get(i) + ",";
+            }
+        }
+        return ingredients;
+    }
     public void deleteMealFromMenu(Meal meal){
         FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
