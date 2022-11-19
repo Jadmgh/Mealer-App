@@ -37,7 +37,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     private AlertDialog dialog;
     public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients;
     public EditText editMealName, editMealType,editCuisineType,editAllergens, editMealPrice, editMealDescription, editIngredients;
-    public Button btnMakeMeal, btnAddMeal, btnDeleteMealFromOffered,btnDeleteMealFromMenu;
+    public Button btnMakeMeal, btnAddMeal, btnDeleteMealFromOffered,btnDeleteMealFromMenu,btnBack;
 
     public ListView menuListView, offeredMealsListView;
     public ArrayList<Meal> menuList, offeredMealsList;
@@ -423,6 +423,16 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealDescription.setText(meal.mealDescription);
         String ingredients = "";
 
+
+        btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         btnAddMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -458,6 +468,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealPrice.setText(meal.mealPrice);
         mealDescription.setText(meal.mealDescription);
         String ingredients = "";
+        btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
 
         for (int i = 0; i < meal.ingredients.size(); i++) {
             if (i+1 == meal.ingredients.size()) {
@@ -474,6 +485,13 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         dialogBuilder.setView(mealPopupView);
         dialog = dialogBuilder.create();
         dialog.show();
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         btnDeleteMealFromOffered.setOnClickListener(new View.OnClickListener() {
             @Override
