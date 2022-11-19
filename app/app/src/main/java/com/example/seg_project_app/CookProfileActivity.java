@@ -188,4 +188,73 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+
+    public void openMealNotOfferedFromDatabase(String mealName){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(mealName);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot mealSnapshot) {
+                if(mealSnapshot.child("mealName").getValue() !=null) {
+                    ArrayList<String> ingredients = new ArrayList<String>();
+                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
+                        ingredients.add(ingredientSnapshot.getValue().toString());
+                    }
+                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+
+                    openMealNotOfferedDialog(meal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void openMealNotOfferedDialog(Meal meal) {
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_meal_not_offered,null);
+        mealName = (TextView) mealPopupView.findViewById(R.id.mealName);
+        mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
+        mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
+        mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
+        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
+        mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
+        mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
+
+        btnAddMeal = (Button) mealPopupView.findViewById(R.id.btnDeleteFromOffered);
+        btnDeleteMealFromMenu = (Button) mealPopupView.findViewById(R.id.btnDeleteMealFromAllMenus);
+
+        dialogBuilder.setView(mealPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        mealName.setText(meal.mealName);
+        mealType.setText(meal.mealType);
+        mealCuisine.setText(meal.mealCuisine);
+        mealAllergens.setText(meal.mealAllergens);
+        mealPrice.setText(meal.mealPrice);
+        mealDescription.setText(meal.mealDescription);
+        String ingredients = "";
+
+        btnAddMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: add meal to offered
+                dialog.dismiss();
+            }
+        });
+
+        btnDeleteMealFromMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                //TODO: delete meal from menu
+            }
+        });
+    }
 }
