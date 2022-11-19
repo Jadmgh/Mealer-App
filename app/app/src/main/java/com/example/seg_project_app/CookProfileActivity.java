@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.prefs.PreferenceChangeEvent;
+import java.util.List;
 
 public class CookProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,7 +37,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     private AlertDialog dialog;
     public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients;
     public EditText editMealName, editMealType,editCuisineType,editAllergens, editMealPrice, editMealDescription, editIngredients;
-    public Button btnMakeMeal, btnAddMeal,btnDeleteMealFromMenu, btnDeleteMealFromAllMenus, btnDeleteMealFromOffered;
+    public Button btnMakeMeal, btnAddMeal, btnDeleteMealFromOffered,btnDeleteMealFromMenu;
 
     public ListView menuListView, offeredMealsListView;
     public ArrayList<Meal> menuList, offeredMealsList;
@@ -46,7 +46,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cook_profile_temp);
+        setContentView(R.layout.activity_cook_profile);
         text = (TextView) findViewById(R.id.textView);
 
         btnCreateMeal = (Button) findViewById(R.id.btnCreateMeal);
@@ -87,61 +87,27 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
         txtSignOut = (TextView) findViewById(R.id.txtSignOut);
         txtSignOut.setOnClickListener(this);
-    }
 
-    public void getOfferedMealsFromFirebase(){
+        offeredMealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                offeredMealsList = new ArrayList<Meal>();
-                for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
-                    ArrayList<String> ingredients = new ArrayList<String>();
-                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
-                        ingredients.add(ingredientSnapshot.getValue().toString());
-                    }
-                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
-                    offeredMealsList.add(meal);
-                }
-                //TODO: offered meals in list
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = offeredMealsListView.getItemAtPosition(position);
+                String mealName = (String) o;
+                openMealOfferedFromDatabase(mealName);
             }
         });
 
-    }
-
-
-    public void getMenuFromFirebase(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu");
-        reference.addValueEventListener(new ValueEventListener() {
+        menuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                menuList = new ArrayList<Meal>();
-                for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
-                    ArrayList<String> ingredients = new ArrayList<String>();
-                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
-                        ingredients.add(ingredientSnapshot.getValue().toString());
-                    }
-                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
-                    menuList.add(meal);
-                }
-                //TODO: update list view
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Object o = menuListView.getItemAtPosition(position);
+                String mealName = (String) o;
+                openMealNotOfferedFromDatabase(mealName);
 
             }
         });
-
     }
+
 
     @Override
     public void onClick(View view) {
@@ -177,7 +143,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         btnMakeMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Requirements check
 
 
                 ArrayList<String> ingredients = new ArrayList<String>();
@@ -191,9 +157,11 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                     addMealToMenu(meal);
                     dialog.dismiss();
                 }
+
             }
         });
     }
+
 
     public void addMealToMenu(Meal meal){
         FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(meal.mealName).setValue(meal)
@@ -209,74 +177,6 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                     }
                 });
         getMenuFromFirebase();
-    }
-    public void openMealNotOfferedFromDatabase(String mealName){
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(mealName);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot mealSnapshot) {
-                if(mealSnapshot.child("mealName").getValue() !=null) {
-                    ArrayList<String> ingredients = new ArrayList<String>();
-                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
-                        ingredients.add(ingredientSnapshot.getValue().toString());
-                    }
-                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
-
-                    openMealNotOfferedDialog(meal);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    private void openMealNotOfferedDialog(Meal meal) {
-
-        dialogBuilder = new AlertDialog.Builder(this);
-        final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_meal_not_offered,null);
-        mealName = (TextView) mealPopupView.findViewById(R.id.mealName);
-        mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
-        mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
-        mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
-        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
-        mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
-        mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
-
-        btnAddMeal = (Button) mealPopupView.findViewById(R.id.btnDeleteFromOffered);
-        btnDeleteMealFromMenu = (Button) mealPopupView.findViewById(R.id.btnDeleteMealFromAllMenus);
-
-        dialogBuilder.setView(mealPopupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-        mealName.setText(meal.mealName);
-        mealType.setText(meal.mealType);
-        mealCuisine.setText(meal.mealCuisine);
-        mealAllergens.setText(meal.mealAllergens);
-        mealPrice.setText(meal.mealPrice);
-        mealDescription.setText(meal.mealDescription);
-        String ingredients = "";
-
-        btnAddMeal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: add meal to offered
-                dialog.dismiss();
-            }
-        });
-
-        btnDeleteMealFromMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                //TODO: delete meal from menu
-            }
-        });
     }
 
     public boolean requirementsForInput(String mealName, String mealType, String mealCuisine, String mealAllergens,
@@ -351,6 +251,11 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             return false;
         }
 
+        if (ingredients.size()==0){
+            editIngredients.setError("Input at least one ingredients");
+            editIngredients.requestFocus();
+            return false;
+        }
         for(int i = 0; i < ingredients.size(); i++){
             if(this.hasNumeric(ingredients.get(i))){
                 editIngredients.setError("Only characters are allowed");
@@ -385,7 +290,272 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             }
         }
         return false;
+    }
 
+    public void getMenuFromFirebase(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                menuList = new ArrayList<Meal>();
+                for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
+                    ArrayList<String> ingredients = new ArrayList<String>();
+                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
+                        ingredients.add(ingredientSnapshot.getValue().toString());
+                    }
+                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                    menuList.add(meal);
+                }
+                menuListViewUpdate();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    public void getOfferedMealsFromFirebase(){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                offeredMealsList = new ArrayList<Meal>();
+                for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
+                    ArrayList<String> ingredients = new ArrayList<String>();
+                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
+                        ingredients.add(ingredientSnapshot.getValue().toString());
+                    }
+                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                    offeredMealsList.add(meal);
+                }
+                offeredMealsListViewUpdate();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    public void openMealNotOfferedFromDatabase(String mealName){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(mealName);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot mealSnapshot) {
+                if(mealSnapshot.child("mealName").getValue() !=null) {
+                    ArrayList<String> ingredients = new ArrayList<String>();
+                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
+                        ingredients.add(ingredientSnapshot.getValue().toString());
+                    }
+                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+
+                    openMealNotOfferedDialog(meal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    public void openMealOfferedFromDatabase(String mealName){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(mealName);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot mealSnapshot) {
+                if(mealSnapshot.child("mealName").getValue() !=null) {
+                    ArrayList<String> ingredients = new ArrayList<String>();
+                    for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
+                        ingredients.add(ingredientSnapshot.getValue().toString());
+                    }
+                    Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+
+                    openMealOfferedDialog(meal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void openMealNotOfferedDialog(Meal meal) {
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_meal_not_offered,null);
+        mealName = (TextView) mealPopupView.findViewById(R.id.mealName);
+        mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
+        mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
+        mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
+        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
+        mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
+        mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
+
+        btnAddMeal = (Button) mealPopupView.findViewById(R.id.btnDeleteFromOffered);
+        btnDeleteMealFromMenu = (Button) mealPopupView.findViewById(R.id.btnDeleteMealFromAllMenus);
+
+        dialogBuilder.setView(mealPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        mealName.setText(meal.mealName);
+        mealType.setText(meal.mealType);
+        mealCuisine.setText(meal.mealCuisine);
+        mealAllergens.setText(meal.mealAllergens);
+        mealPrice.setText(meal.mealPrice);
+        mealDescription.setText(meal.mealDescription);
+        String ingredients = "";
+
+        btnAddMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addMealToOfferedMeals(meal);        //TODO: check if this works
+                dialog.dismiss();
+            }
+        });
+
+        btnDeleteMealFromMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                deleteMealFromMenu(meal);       //TODO: check if delete works
+            }
+        });
+    }
+
+    private void openMealOfferedDialog(Meal meal) {
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_meal_offered,null);
+        mealName = (TextView) mealPopupView.findViewById(R.id.mealName);
+        mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
+        mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
+        mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
+        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
+        mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
+        mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
+
+        mealName.setText(meal.mealName);
+        mealType.setText(meal.mealType);
+        mealCuisine.setText(meal.mealCuisine);
+        mealAllergens.setText(meal.mealAllergens);
+        mealPrice.setText(meal.mealPrice);
+        mealDescription.setText(meal.mealDescription);
+        String ingredients = "";
+
+        for (int i = 0; i < meal.ingredients.size(); i++) {
+            if (i+1 == meal.ingredients.size()) {
+                ingredients = ingredients + meal.ingredients.get(i) ;
+            }
+            else {
+                ingredients = ingredients + meal.ingredients.get(i) + ",";
+            }
+        }
+        mealIngredients.setText(ingredients);
+
+        btnDeleteMealFromOffered = (Button) mealPopupView.findViewById(R.id.btnDeleteFromOffered);
+
+        dialogBuilder.setView(mealPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        btnDeleteMealFromOffered.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                dialog.dismiss();
+                deleteMealFromOfferedMeals(meal);       //TODO: check if delete works
+            }
+        });
+    }
+
+
+    public void deleteMealFromMenu(Meal meal){
+        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                    ref.child("Users").child(cook.userID).child("Menu").child(meal.mealName).removeValue();
+                    deleteMealFromOfferedMeals(meal);       //TODO: ask if deleted from offered too
+                    getMenuFromFirebase();
+                    dialog.dismiss();
+
+                }
+                else {
+                    Toast.makeText(CookProfileActivity.this, "Cannot delete meal from menu since it is an offered meal", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CookProfileActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void addMealToOfferedMeals(Meal meal){
+        //TODO: check if meal already exists
+        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).setValue(meal)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(CookProfileActivity.this, "You have successfully added meal to offered meals", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(CookProfileActivity.this, "Failed to add meal to offered meals!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        getOfferedMealsFromFirebase();
+    }
+
+    public void deleteMealFromOfferedMeals(Meal meal){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("Users").child(cook.userID).child("Offered meals").child(meal.mealName).removeValue();
+        getOfferedMealsFromFirebase();
+    }
+
+
+    public void menuListViewUpdate(){
+        List<String> menuNames = new ArrayList<String>();
+
+        for (int i = 0; i < menuList.size(); i++) {
+            menuNames.add(menuList.get(i).mealName);
+        }
+
+
+        ArrayAdapter<String> adapterMealNames = new ArrayAdapter<String>(CookProfileActivity.this, android.R.layout.simple_list_item_1,menuNames);
+
+        menuListView.setAdapter(adapterMealNames);
+    }
+
+    public void offeredMealsListViewUpdate(){
+        List<String> offeredMealsNames = new ArrayList<String>();
+        for (int i = 0; i < offeredMealsList.size(); i++) {
+            offeredMealsNames.add(offeredMealsList.get(i).mealName);
+        }
+
+        ArrayAdapter<String> adapterOfferedMeals = new ArrayAdapter<String>(CookProfileActivity.this, android.R.layout.simple_list_item_1,offeredMealsNames);
+        offeredMealsListView.setAdapter(adapterOfferedMeals);
     }
 
 }
