@@ -66,8 +66,9 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
         if (cook.tempBanned.equals("true")) {
             if (cook.pastUnbanDate()){
-                text.setText(cook.firstName + " " + cook.lastName + ", you are temporarily banned from this app. You will be unbanned on " + cook.getUnbanDateAsString());
-            }
+                Intent i = new Intent(this, com.example.seg_project_app.CookProfileBanned.class);
+                i.putExtra("ban info", cook.getUnbanDateAsString());
+                startActivity(i);            }
             else{
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
                 reference.child(cook.userID).child("unbanDate").setValue("");
@@ -77,7 +78,9 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                 getOfferedMealsFromFirebase();
             }
         } else if (cook.permanentlyBanned.equals("true")) {
-            text.setText(cook.firstName + " " + cook.lastName + ", you are permanently banned from this app. You can no longer use Mealer");
+            Intent i = new Intent(this, com.example.seg_project_app.CookProfileBanned.class);
+            i.putExtra("ban info", "");
+            startActivity(i);
         } else {
             text.setText("Hello, " + cook.firstName + " ,you are a cook");
             getMenuFromFirebase();

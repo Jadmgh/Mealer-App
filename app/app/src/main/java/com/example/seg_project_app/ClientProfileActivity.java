@@ -27,7 +27,7 @@ public class ClientProfileActivity extends AppCompatActivity implements View.OnC
         String[] userValues = intent.getStringArrayExtra("userValue");
         client = new Client(userValues[0],userValues[1], userValues[2],userValues[3],userValues[4],userValues[5],userValues[6],userValues[7]);
 
-        text.setText("Hello, "+client.firstName+ ",you are a cook"+ "uid = "+client.userID);
+        text.setText("Hello, "+client.firstName+ ",you are a client");
         txtSignOut = (TextView) findViewById(R.id.txtSignOut);
         txtSignOut.setOnClickListener(this);
 
