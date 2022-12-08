@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +28,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CookMealsActivity extends AppCompatActivity implements View.OnClickListener {
+public class CookMealsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
+    public Spinner spinnerMealType, spinnerMealCuisine;
     private TextView txtSignOut;
     private TextView text;
     public  Cook cook;
     private Button btnCreateMeal;
+    public String typeToSearch, cuisineToSearch;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients;
@@ -56,7 +59,6 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
 
         menuList = new ArrayList<Meal>();
         offeredMealsList = new ArrayList<Meal>();
-
         Intent intent = getIntent();
 
         userValues = intent.getStringArrayExtra("userInfo");
@@ -116,12 +118,22 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
         dialogBuilder = new AlertDialog.Builder(this);
         final View mealPopupView = getLayoutInflater().inflate(R.layout.activity_create_meal,null);
         editMealName = (EditText) mealPopupView.findViewById(R.id.editMealName);
-        editMealType = (EditText) mealPopupView.findViewById(R.id.editMealType);
-        editCuisineType = (EditText) mealPopupView.findViewById(R.id.editCuisineType);
         editAllergens = (EditText) mealPopupView.findViewById(R.id.editAllergens);
         editMealPrice = (EditText) mealPopupView.findViewById(R.id.editMealPrice);
         editMealDescription = (EditText) mealPopupView.findViewById(R.id.editMealDescription);
         editIngredients = (EditText) mealPopupView.findViewById(R.id.editIngredients);
+
+        spinnerMealType = mealPopupView.findViewById(R.id.spinnerMealType);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.create_meal_type_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMealType.setAdapter(adapter);
+        spinnerMealType.setOnItemSelectedListener(this);
+
+        spinnerMealCuisine = mealPopupView.findViewById(R.id.spinnerCuisineType);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.create_meal_cuisine_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMealCuisine.setAdapter(adapter2);
+        spinnerMealCuisine.setOnItemSelectedListener(this);
 
         btnMakeMeal = (Button) mealPopupView.findViewById(R.id.btnMakeMeal);
 
@@ -136,9 +148,9 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
 
 
                 ArrayList<String> ingredients = stringToArrayList(editIngredients.getText().toString());
-                if (requirementsForInput(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients) == true) {
+                if (requirementsForInput(editMealName.getText().toString(),typeToSearch, cuisineToSearch, editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients) == true) {
 
-                    Meal meal = new Meal(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients, cook.firstName, cook.lastName,cook.rating,cook.userID);
+                    Meal meal = new Meal(editMealName.getText().toString(), typeToSearch, cuisineToSearch, editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients, cook.firstName, cook.lastName,cook.rating,cook.userID);
                     addMealToMenu(meal);
                     dialog.dismiss();
                 }
@@ -180,30 +192,6 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
             editMealName.requestFocus();
             return false;
         }
-
-        if(mealType.isEmpty()){
-            editMealType.setError("Meal type is required");
-            editMealType.requestFocus();
-            return false;
-        }
-        else if(meal.hasNumeric(mealType)){
-            editMealType.setError("Only characters are allowed");
-            editMealType.requestFocus();
-            return false;
-        }
-
-        if(mealCuisine.isEmpty()){
-            editCuisineType.setError("Cuisine type is required");
-            editCuisineType.requestFocus();
-            return false;
-
-        }
-        else if(meal.hasNumeric(mealCuisine)){
-            editCuisineType.setError("Only characters are allowed");
-            editCuisineType.requestFocus();
-            return false;
-        }
-
 
         if(mealAllergens.isEmpty()){
             editAllergens.setError("Allergens required");
@@ -252,6 +240,25 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
         }
 
         return true;
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        switch (adapterView.getId()) {
+            case R.id.spinnerMealType:
+                spinnerMealType.setSelection(position);
+                typeToSearch = (String) spinnerMealType.getSelectedItem();
+                return;
+            case R.id.spinnerCuisineType:
+                spinnerMealCuisine.setSelection(position);
+                cuisineToSearch = (String) spinnerMealCuisine.getSelectedItem();
+                return;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 
@@ -328,7 +335,6 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
                     openMealNotOfferedDialog(meal);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -350,7 +356,7 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
                             , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients
-                    ,mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
+                            ,mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
 
                     openMealOfferedDialog(meal);
                 }
@@ -393,7 +399,6 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
 
         mealIngredients.setText(ingredients);
         btnBack = (Button) mealPopupView.findViewById(R.id.btnBackToProfile);
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

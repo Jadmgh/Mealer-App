@@ -68,8 +68,8 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
-            <EditText
-                android:id="@+id/editMealType"
+            <Spinner
+                android:id="@+id/spinnerMealType"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
@@ -88,8 +88,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
-            <EditText
-                android:id="@+id/editCuisineType"
+            <Spinner
+                android:id="@+id/spinnerCuisineType"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"

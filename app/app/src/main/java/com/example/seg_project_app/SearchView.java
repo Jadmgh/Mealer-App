@@ -123,7 +123,7 @@ public class SearchView extends AppCompatActivity implements AdapterView.OnItemS
                     }
                 }
                 else if (!typeToSearch.equals("Any")&& cuisineToSearch.equals("Any")){
-                    for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot mealSnapshot : mealsSnapshot.getChildren()) {
                         if (mealSnapshot.child("mealName").getValue().toString().toLowerCase().contains(nameToSearch) && mealSnapshot.child("mealType").getValue().toString().equals(typeToSearch) ) {
                             ArrayList<String> ingredients = new ArrayList<String>();
                             for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
@@ -139,7 +139,7 @@ public class SearchView extends AppCompatActivity implements AdapterView.OnItemS
                     }
                 }
                 else if (typeToSearch.equals("Any")&& !cuisineToSearch.equals("Any")){
-                    for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot mealSnapshot : mealsSnapshot.getChildren()) {
                         if (mealSnapshot.child("mealName").getValue().toString().toLowerCase().contains(nameToSearch) && mealSnapshot.child("mealCuisine").getValue().toString().equals(cuisineToSearch) ) {
                             ArrayList<String> ingredients = new ArrayList<String>();
                             for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
@@ -155,7 +155,7 @@ public class SearchView extends AppCompatActivity implements AdapterView.OnItemS
                     }
                 }
                 else{
-                    for (DataSnapshot mealSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot mealSnapshot : mealsSnapshot.getChildren()) {
                         if (mealSnapshot.child("mealName").getValue().toString().contains(nameToSearch) && mealSnapshot.child("mealCuisine").getValue().toString().equals(cuisineToSearch) && mealSnapshot.child("mealType").getValue().toString().equals(typeToSearch) ) {
                             ArrayList<String> ingredients = new ArrayList<String>();
                             for (DataSnapshot ingredientSnapshot : mealSnapshot.child("ingredients").getChildren()) {
