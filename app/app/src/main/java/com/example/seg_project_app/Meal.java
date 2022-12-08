@@ -5,9 +5,18 @@ import java.util.ArrayList;
 public class Meal {
     public String mealName, mealType,mealCuisine,mealAllergens,mealDescription,mealPrice;
     public ArrayList<String> ingredients;
+    public String cookFirstName, cookLastName, cookRating, cookUID;
+
+    public String getMealName() {
+        return mealName;
+    }
+
+    public void setMealName(String mealName) {
+        this.mealName = mealName;
+    }
 
     public Meal(String mealName, String mealType, String mealCuisine, String mealAllergens,
-                String mealDescription,String mealPrice, ArrayList<String> ingredients){
+                String mealDescription, String mealPrice, ArrayList<String> ingredients, String cookFirstName, String cookLastName, String cookRating, String cookUID ){
         this.ingredients= ingredients;
         this.mealAllergens = mealAllergens;
         this.mealPrice = mealPrice;
@@ -15,7 +24,13 @@ public class Meal {
         this.mealType = mealType;
         this.mealDescription = mealDescription;
         this.mealName = mealName;
+
+        this.cookLastName = cookLastName;
+        this.cookFirstName = cookFirstName;
+        this.cookRating = cookRating;
+        this.cookUID = cookUID;
     }
+
     public boolean requirementsForInput(String mealName, String mealType, String mealCuisine, String mealAllergens,
                                         String mealDescription,String mealPrice, ArrayList<String> ingredients )
     {
@@ -114,5 +129,9 @@ public class Meal {
             }
         }
         return false;
+    }
+
+    public String getName(){
+        return cookFirstName + " "+ cookLastName;
     }
 }

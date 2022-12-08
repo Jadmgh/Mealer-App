@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CookProfileBanned extends AppCompatActivity {
+public class CookBanned extends AppCompatActivity {
 
     private TextView txtSignOut;
     public TextView textView;
@@ -17,7 +17,7 @@ public class CookProfileBanned extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cook_profile_banned);
+        setContentView(R.layout.activity_cook_banned);
 
         textView = (TextView) findViewById(R.id.textView);
 

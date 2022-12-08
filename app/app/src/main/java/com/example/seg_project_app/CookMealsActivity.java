@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CookProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class CookMealsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView txtSignOut;
     private TextView text;
@@ -37,19 +37,16 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     private AlertDialog dialog;
     public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients;
     public EditText editMealName, editMealType,editCuisineType,editAllergens, editMealPrice, editMealDescription, editIngredients;
-    public Button btnMakeMeal, btnAddMeal, btnDeleteMealFromOffered,btnDeleteMealFromMenu,btnBack;
-
+    public Button btnMakeMeal, btnAddMeal, btnDeleteMealFromOffered,btnDeleteMealFromMenu,btnBack,btnBackToProfile;
+    public String[] userValues;
     public ListView menuListView, offeredMealsListView;
     public ArrayList<Meal> menuList, offeredMealsList;
 
-    public CookProfileActivity(){
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cook_profile);
-        text = (TextView) findViewById(R.id.textView);
+        setContentView(R.layout.activity_cook_meals);
 
         btnCreateMeal = (Button) findViewById(R.id.btnCreateMeal);
         btnCreateMeal.setOnClickListener(this);
@@ -62,33 +59,13 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
         Intent intent = getIntent();
 
-        String[] userValues = intent.getStringArrayExtra("userInfo");
+        userValues = intent.getStringArrayExtra("userInfo");
         cook = new Cook(userValues[0], userValues[1], userValues[2], userValues[3], userValues[4],
                 userValues[5], userValues[6], userValues[7], userValues[8], userValues[9]);
 
-        if (cook.tempBanned.equals("true")) {
-            if (cook.pastUnbanDate()){
-                Intent i = new Intent(this, com.example.seg_project_app.CookProfileBanned.class);
-                i.putExtra("ban info", cook.getUnbanDateAsString());
-                startActivity(i);            }
-            else{
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-                reference.child(cook.userID).child("unbanDate").setValue("");
-                reference.child(cook.userID).child("tempBanned").setValue("false");
-                text.setText("Hello, " + cook.firstName + " ,you are a cook");
-                getMenuFromFirebase();
-                getOfferedMealsFromFirebase();
-            }
-        } else if (cook.permanentlyBanned.equals("true")) {
-            Intent i = new Intent(this, com.example.seg_project_app.CookProfileBanned.class);
-            i.putExtra("ban info", "");
-            startActivity(i);
-        } else {
-            text.setText("Hello, " + cook.firstName + " ,you are a cook");
-            getMenuFromFirebase();
-            getOfferedMealsFromFirebase();
-
-        }
+        cook.rating = userValues[10];
+        getMenuFromFirebase();
+        getOfferedMealsFromFirebase();
 
         txtSignOut = (TextView) findViewById(R.id.txtSignOut);
         txtSignOut.setOnClickListener(this);
@@ -111,6 +88,9 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
             }
         });
+
+        btnBackToProfile = (Button) findViewById(R.id.btnBackToProfile);
+        btnBackToProfile.setOnClickListener(this);
     }
 
 
@@ -119,12 +99,16 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.txtSignOut:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(CookProfileActivity.this, MainActivity.class));
+                startActivity(new Intent(CookMealsActivity.this, MainActivity.class));
                 return;
             case R.id.btnCreateMeal:
                 createNewMealDialog();
                 getMenuFromFirebase();
                 return;
+            case R.id.btnBackToProfile:
+                Intent i = new Intent(CookMealsActivity.this, CookActivity.class);
+                i.putExtra("userInfo", userValues);
+                startActivity(i);
         }
     }
 
@@ -154,7 +138,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                 ArrayList<String> ingredients = stringToArrayList(editIngredients.getText().toString());
                 if (requirementsForInput(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients) == true) {
 
-                    Meal meal = new Meal(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients);
+                    Meal meal = new Meal(editMealName.getText().toString(), editMealType.getText().toString(), editCuisineType.getText().toString(), editAllergens.getText().toString(), editMealDescription.getText().toString(), editMealPrice.getText().toString(), ingredients, cook.firstName, cook.lastName,cook.rating,cook.userID);
                     addMealToMenu(meal);
                     dialog.dismiss();
                 }
@@ -170,10 +154,10 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(CookProfileActivity.this, "You have successfully added meal to menu", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CookMealsActivity.this, "You have successfully added meal to menu", Toast.LENGTH_LONG).show();
 
                         } else {
-                            Toast.makeText(CookProfileActivity.this, "Failed to add meal to menu!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CookMealsActivity.this, "Failed to add meal to menu!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -181,10 +165,10 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     public boolean requirementsForInput(String mealName, String mealType, String mealCuisine, String mealAllergens,
-                                        String mealDescription,String mealPrice, ArrayList<String> ingredients )
+                                        String mealDescription,String mealPrice, ArrayList<String> ingredients)
     {
         Meal meal = new Meal( mealName,  mealType,  mealCuisine, mealAllergens,
-                 mealDescription,mealPrice, ingredients);
+                mealDescription,mealPrice, ingredients, cook.firstName, cook.lastName,cook.rating,cook.userID);
 
         if(mealName.isEmpty()){
             editMealName.setError("Meal name required");
@@ -271,30 +255,6 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-//    public boolean isNumeric(String characters){
-//        if (characters == null) {
-//            return false;
-//        }
-//        try {
-//            Double.parseDouble(characters);
-//            return true;
-//        } catch (NumberFormatException nfe) {
-//
-//            return false;
-//        }
-//    }
-//    public boolean hasNumeric(String characters){
-//
-//        char[] chars = characters.toCharArray();
-//        StringBuilder sb = new StringBuilder();
-//        for(char c : chars){
-//            if(Character.isDigit(c)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
     public void getMenuFromFirebase(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu");
         reference.addValueEventListener(new ValueEventListener() {
@@ -307,7 +267,8 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                         ingredients.add(ingredientSnapshot.getValue().toString());
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients,
+                            mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
                     menuList.add(meal);
                 }
                 menuListViewUpdate();
@@ -320,6 +281,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
+
     public void getOfferedMealsFromFirebase(){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals");
@@ -333,7 +295,8 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                         ingredients.add(ingredientSnapshot.getValue().toString());
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients,
+                            mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
                     offeredMealsList.add(meal);
                 }
                 offeredMealsListViewUpdate();
@@ -359,7 +322,8 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                         ingredients.add(ingredientSnapshot.getValue().toString());
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients,
+                            mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
 
                     openMealNotOfferedDialog(meal);
                 }
@@ -385,7 +349,8 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                         ingredients.add(ingredientSnapshot.getValue().toString());
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
-                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients);
+                            , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients
+                            ,mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
 
                     openMealOfferedDialog(meal);
                 }
@@ -427,7 +392,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         String ingredients = cook.ingredientsToString(meal.ingredients);
 
         mealIngredients.setText(ingredients);
-        btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
+        btnBack = (Button) mealPopupView.findViewById(R.id.btnBackToProfile);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -460,18 +425,18 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         mealType = (TextView) mealPopupView.findViewById(R.id.mealType);
         mealCuisine = (TextView) mealPopupView.findViewById(R.id.mealCuisine);
         mealAllergens = (TextView) mealPopupView.findViewById(R.id.mealAllergens);
-//        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
+        mealPrice = (TextView) mealPopupView.findViewById(R.id.mealPrice);
         mealDescription = (TextView) mealPopupView.findViewById(R.id.mealDescription);
         mealIngredients = (TextView) mealPopupView.findViewById(R.id.mealIngeredients);
 
         mealName.setText(meal.mealName);
         mealType.setText(meal.mealType);
         mealCuisine.setText(meal.mealCuisine);
-//        mealAllergens.setText(meal.mealAllergens);
+        mealAllergens.setText(meal.mealAllergens);
         mealPrice.setText(meal.mealPrice);
         mealDescription.setText(meal.mealDescription);
         String ingredients = ingredientsToString(meal.ingredients);
-        btnBack = (Button) mealPopupView.findViewById(R.id.btnBack);
+        btnBack = (Button) mealPopupView.findViewById(R.id.btnBackToProfile);
 
         mealIngredients.setText(ingredients);
 
@@ -518,6 +483,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         }
         return ingredients;
     }
+
     public void deleteMealFromMenu(Meal meal){
         FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -531,19 +497,20 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
 
                 }
                 else {
-                    Toast.makeText(CookProfileActivity.this, "Cannot delete meal from menu since it is an offered meal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CookMealsActivity.this, "Cannot delete meal from menu since it is an offered meal", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(CookProfileActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CookMealsActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
     public void addMealToOfferedMeals(Meal meal){
+        FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Menu").child(meal.mealName).child("offered").setValue("true");
         FirebaseDatabase.getInstance().getReference("Users").child(cook.userID).child("Offered meals").child(meal.mealName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -553,32 +520,36 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(CookProfileActivity.this, "You have successfully added meal to offered meals", Toast.LENGTH_LONG).show();
-
+                                        FirebaseDatabase.getInstance().getReference("Offered Meals").child(meal.mealName).setValue(meal).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Toast.makeText(CookMealsActivity.this, "You have successfully added meal to offered meals", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                                     } else {
-                                        Toast.makeText(CookProfileActivity.this, "Failed to add meal to offered meals!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(CookMealsActivity.this, "Failed to add meal to offered meals!", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                     getOfferedMealsFromFirebase();
                 }
                 else {
-                    Toast.makeText(CookProfileActivity.this, "Cannot offer meal from menu since it is already offered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CookMealsActivity.this, "Cannot offer meal from menu since it is already offered", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(CookProfileActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CookMealsActivity.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
     public void deleteMealFromOfferedMeals(Meal meal){
-
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.child("Users").child(cook.userID).child("Offered meals").child(meal.mealName).removeValue();
+        ref.child("Offered Meals").child(meal.mealName).removeValue();
         getOfferedMealsFromFirebase();
     }
 
@@ -591,7 +562,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
         }
 
 
-        ArrayAdapter<String> adapterMealNames = new ArrayAdapter<String>(CookProfileActivity.this, android.R.layout.simple_list_item_1,menuNames);
+        ArrayAdapter<String> adapterMealNames = new ArrayAdapter<String>(CookMealsActivity.this, android.R.layout.simple_list_item_1,menuNames);
 
         menuListView.setAdapter(adapterMealNames);
     }
@@ -602,7 +573,7 @@ public class CookProfileActivity extends AppCompatActivity implements View.OnCli
             offeredMealsNames.add(offeredMealsList.get(i).mealName);
         }
 
-        ArrayAdapter<String> adapterOfferedMeals = new ArrayAdapter<String>(CookProfileActivity.this, android.R.layout.simple_list_item_1,offeredMealsNames);
+        ArrayAdapter<String> adapterOfferedMeals = new ArrayAdapter<String>(CookMealsActivity.this, android.R.layout.simple_list_item_1,offeredMealsNames);
         offeredMealsListView.setAdapter(adapterOfferedMeals);
     }
 

@@ -74,7 +74,7 @@ import java.util.Date;
 
 public class Cook extends User {
 
-    public String firstName, lastName, address, description, permanentlyBanned, tempBanned, unbanDate;
+    public String firstName, lastName, address, description, permanentlyBanned, tempBanned, unbanDate, rating, nbOfReviews;
 
     public Cook(){
     }
@@ -89,6 +89,8 @@ public class Cook extends User {
         this.permanentlyBanned = permanentlyBanned;
         this.tempBanned = tempBanned;
         this.unbanDate = unbanDate;
+        rating = "";
+        nbOfReviews ="";
     }
 
     public Boolean isPermanentlyBanned(){

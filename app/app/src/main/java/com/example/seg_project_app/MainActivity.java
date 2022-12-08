@@ -7,9 +7,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -29,7 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Tag;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -163,28 +160,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    userType = snapshot.child("type").getValue().toString();
-                    if (userType.equals("client")) {
-                        Intent i = new Intent(MainActivity.this, ClientActivity.class);
-                        String[] clientInfo = {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(),
-                                snapshot.child("password").getValue().toString(), snapshot.child("address").getValue().toString(), snapshot.child("creditCard").getValue().toString(), snapshot.child("CCV").getValue().toString(), snapshot.child("userID").getValue().toString()};
+                userType = snapshot.child("type").getValue().toString();
+                if (userType.equals("client")) {
+                    Intent i = new Intent(MainActivity.this, ClientActivity.class);
+                    String[] clientInfo = {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(),
+                            snapshot.child("password").getValue().toString(), snapshot.child("address").getValue().toString(), snapshot.child("creditCard").getValue().toString(), snapshot.child("CCV").getValue().toString(), snapshot.child("userID").getValue().toString()};
 //                    Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_LONG).show();
-                        i.putExtra("userValue", clientInfo);
-                        startActivity(i);
-                    } else if (userType.equals("administrator")) {
-                        Intent i = new Intent(MainActivity.this, AdministratorProfileActivity.class);
-                        String[] adminInfo = {snapshot.child("email").getValue().toString(), snapshot.child("password").getValue().toString(), snapshot.child("userID").toString()};
-                        i.putExtra("userValue", adminInfo);
-                        startActivity(i);
-                    } else if (userType.equals("cook")) {
-                        Intent i = new Intent(MainActivity.this, CookProfileActivity.class);
-                        String uid = snapshot.child("userID").getValue().toString();
-                        String[] userValues = {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("password").getValue().toString(), snapshot.child("address").getValue().toString(),
-                                snapshot.child("description").getValue().toString(), snapshot.child("userID").getValue().toString(), snapshot.child("permanentlyBanned").getValue().toString(), snapshot.child("tempBanned").getValue().toString(), snapshot.child("unbanDate").getValue().toString()};
-                        i.putExtra("userInfo", userValues);
-                        i.putExtra("uid", uid);
-                        startActivity(i);
-                    }
+                    i.putExtra("userValue", clientInfo);
+                    startActivity(i);
+                } else if (userType.equals("administrator")) {
+                    Intent i = new Intent(MainActivity.this, AdministratorProfileActivity.class);
+                    String[] adminInfo = {snapshot.child("email").getValue().toString(), snapshot.child("password").getValue().toString(), snapshot.child("userID").toString()};
+                    i.putExtra("userValue", adminInfo);
+                    startActivity(i);
+                } else if (userType.equals("cook")) {
+                    Intent i = new Intent(MainActivity.this, CookActivity.class);
+                    String uid = snapshot.child("userID").getValue().toString();
+                    String[] userValues = {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(), snapshot.child("password").getValue().toString(), snapshot.child("address").getValue().toString(),
+                            snapshot.child("description").getValue().toString(), snapshot.child("userID").getValue().toString(), snapshot.child("permanentlyBanned").getValue().toString(), snapshot.child("tempBanned").getValue().toString(), snapshot.child("unbanDate").getValue().toString() ,snapshot.child("rating").getValue().toString()};
+                    i.putExtra("userInfo", userValues);
+                    i.putExtra("uid", uid);
+                    startActivity(i);
+                }
             }
 
             @Override
