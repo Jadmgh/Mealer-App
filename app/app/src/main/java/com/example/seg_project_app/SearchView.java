@@ -43,10 +43,10 @@ public class SearchView extends AppCompatActivity implements AdapterView.OnItemS
     public Client client;
     private String[] userValues;
     public TextView mealName, mealType, mealCuisine ,mealAllergens, mealPrice, mealDescription, mealIngredients, cookName, cookRating;
-    public static ArrayList<Meal> requestedMeals;
-    FirebaseDatabase rootnode;
-    DatabaseReference  reference;
-    DatabaseReference reference2;
+   public static ArrayList<Meal> requestedMeals;
+   FirebaseDatabase rootnode;
+   DatabaseReference  reference;
+   DatabaseReference reference2;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -262,7 +262,7 @@ public class SearchView extends AppCompatActivity implements AdapterView.OnItemS
                             }
                         });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(SearchView.this, "Meal already requested", Toast.LENGTH_SHORT).show();

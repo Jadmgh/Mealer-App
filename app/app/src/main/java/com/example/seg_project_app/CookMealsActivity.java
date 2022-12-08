@@ -350,7 +350,7 @@ public class CookMealsActivity extends AppCompatActivity implements View.OnClick
                     }
                     Meal meal = new Meal(mealSnapshot.child("mealName").getValue().toString(), mealSnapshot.child("mealType").getValue().toString(), mealSnapshot.child("mealCuisine").getValue().toString()
                             , mealSnapshot.child("mealAllergens").getValue().toString(), mealSnapshot.child("mealDescription").getValue().toString(), mealSnapshot.child("mealPrice").getValue().toString(), ingredients
-                            ,mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
+                    ,mealSnapshot.child("cookFirstName").getValue().toString(), mealSnapshot.child("cookLastName").getValue().toString(),mealSnapshot.child("cookRating").getValue().toString(),mealSnapshot.child("cookUID").getValue().toString());
 
                     openMealOfferedDialog(meal);
                 }

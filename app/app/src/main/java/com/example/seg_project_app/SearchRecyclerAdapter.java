@@ -1,7 +1,5 @@
 package com.example.seg_project_app;
 
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,4 +87,3 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         void onMealClick (int position);
     }
 }
-

@@ -1,6 +1,7 @@
 package com.example.seg_project_app;
 
 public class Request {
+
     public String cookUID;
     public String clientUID;
     public String cookName;
