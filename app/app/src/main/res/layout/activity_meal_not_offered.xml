@@ -50,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="mealname"
+                    android:fontFamily="monospace"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
@@ -78,6 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="mealtype"
+                    android:fontFamily="monospace"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
@@ -108,6 +110,7 @@
                     android:layout_height="wrap_content"
                     android:text="mealprice"
                     android:textColor="@color/black"
+                    android:fontFamily="monospace"
                     android:textSize="18dp"
                     android:textStyle="bold"
                     />
@@ -137,6 +140,7 @@
                     android:text="mealcuisine"
                     android:textColor="@color/black"
                     android:textSize="18dp"
+                    android:fontFamily="monospace"
                     android:textStyle="bold"
                     />
             </LinearLayout>
@@ -165,6 +169,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
+                    android:fontFamily="monospace"
                     />
             </LinearLayout>
             <Space
@@ -192,6 +197,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
+                    android:fontFamily="monospace"
                     />
             </LinearLayout>
             <Space
@@ -220,6 +226,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
+                    android:fontFamily="monospace"
                     />
             </LinearLayout>
 
@@ -270,7 +277,7 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/btnBack"
+        android:id="@+id/btnBackToProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/purple"

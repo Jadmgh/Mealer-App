@@ -12,25 +12,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtmealname1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:text="Meal Name: "
-            android:textColor="@color/purple"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/txtMealName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:text="Meal Name"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:textStyle="bold"
-            />
+    <TextView
+        android:id="@+id/txtmealname1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Meal Name: "
+        android:textColor="@color/purple"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txtMealName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Meal Name"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        />
 
         <TextView
             android:id="@+id/txtmealprice1"

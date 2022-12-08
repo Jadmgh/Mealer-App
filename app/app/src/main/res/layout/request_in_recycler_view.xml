@@ -21,16 +21,16 @@
             android:textStyle="bold" />
 
 
-        <TextView
-            android:id="@+id/txtClientName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:textStyle="bold"
-            android:text="Client Name:"
-            />
+    <TextView
+        android:id="@+id/txtClientName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:text="Client Name:"
+         />
         <TextView
             android:id="@+id/txtmealname1"
             android:layout_width="wrap_content"
@@ -42,17 +42,17 @@
             android:textSize="12dp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtMealName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meal Name"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:textStyle="bold"
-            android:fontFamily="monospace"
+    <TextView
+        android:id="@+id/txtMealName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meal Name"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
 
-            />
+       />
     </LinearLayout>
 
     <LinearLayout
@@ -91,17 +91,17 @@
             android:textStyle="bold" />
 
 
-        <TextView
-            android:id="@+id/txtRequestStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            android:fontFamily="monospace"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txtRequestStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:fontFamily="monospace"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold" />
 
-    </LinearLayout>
+</LinearLayout>
 
     <View
         android:id="@+id/divider2"

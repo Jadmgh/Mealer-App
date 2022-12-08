@@ -50,12 +50,12 @@
 
                 android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerRequestHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/txtRequestHistory"
-                tools:layout_editor_absoluteX="1dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerRequestHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/txtRequestHistory"
+        tools:layout_editor_absoluteX="1dp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
