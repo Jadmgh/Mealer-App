@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     userType = snapshot.child("type").getValue().toString();
                     if (userType.equals("client")) {
-                        Intent i = new Intent(MainActivity.this, ClientProfileActivity.class);
+                        Intent i = new Intent(MainActivity.this, ClientActivity.class);
                         String[] clientInfo = {snapshot.child("firstName").getValue().toString(), snapshot.child("lastName").getValue().toString(), snapshot.child("email").getValue().toString(),
                                 snapshot.child("password").getValue().toString(), snapshot.child("address").getValue().toString(), snapshot.child("creditCard").getValue().toString(), snapshot.child("CCV").getValue().toString(), snapshot.child("userID").getValue().toString()};
 //                    Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_LONG).show();

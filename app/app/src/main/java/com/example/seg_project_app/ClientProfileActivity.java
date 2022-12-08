@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ClientProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class ClientActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView txtSignOut;
     private TextView text;
@@ -39,7 +39,7 @@ public class ClientProfileActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()){
             case R.id.txtSignOut:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(ClientProfileActivity.this, MainActivity.class));
+                startActivity(new Intent(ClientActivity.this, MainActivity.class));
                 return;
         }
 
