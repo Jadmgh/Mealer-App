@@ -32,4 +32,6 @@ public class CookTest extends TestCase {
         assertTrue(cook.isPermanentlyAndTemporarilyBanned());
     }
 
+
+
 }
