@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -40,7 +41,7 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_cook);
-        btnBack=(Button) findViewById(R.id.btnBackToProfile);
+        btnBack=(Button) findViewById(R.id.btnBack);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -74,7 +75,7 @@ public class RegisterCook extends AppCompatActivity implements View.OnClickListe
                 camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera,100);
                 break;
-            case R.id.btnBackToProfile:
+            case R.id.btnBack:
                 Intent back = new Intent(RegisterCook.this, MainActivity.class);
                 startActivity(back);
                 break;

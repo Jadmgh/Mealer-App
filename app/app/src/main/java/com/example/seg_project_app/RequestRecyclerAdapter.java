@@ -75,3 +75,4 @@ public class RequestRecyclerAdapter extends RecyclerView.Adapter<RequestRecycler
         void onRequestClick (int position);
     }
 }
+

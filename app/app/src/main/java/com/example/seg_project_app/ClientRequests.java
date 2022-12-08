@@ -1,18 +1,18 @@
 package com.example.seg_project_app;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,9 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
-public class ClientRequests extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, RequestRecyclerAdapter.OnRequestListener {
-
+public class ClientRequests extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, RequestRecyclerAdapter.OnRequestListener{
     private TextView txtSignOut;
     private TextView text;
     private  Client client;
