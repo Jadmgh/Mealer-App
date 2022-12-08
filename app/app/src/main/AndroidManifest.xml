@@ -13,13 +13,6 @@
         android:theme="@style/Theme.SEGProjectApp"
         tools:targetApi="31">
         <activity
-            android:name=".CookProfileBanned"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ComplaintView"
             android:exported="false">
             <meta-data
@@ -40,13 +33,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity> <!-- Added These next few lines to fix an issue with CookProfileActivit. Logging in case it causes problems in the future and needs to be deleted -->
-        <activity
-            android:name=".CookProfileActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity> <!--  -->
+        <!--  -->
         <activity
             android:name=".RegisterCook"
             android:exported="false">
