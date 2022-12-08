@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,7 +59,7 @@ public class ClientActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(new Intent(ClientActivity.this, MainActivity.class));
                 return;
             case R.id.btnSearch:
-                Intent searchIntent = new Intent(ClientActivity.this, SearchView.class);
+                Intent searchIntent = new Intent(ClientActivity.this,SearchView.class);
                 searchIntent.putExtra("userInfo", clientInfo);
                 startActivity(searchIntent);
                 return;

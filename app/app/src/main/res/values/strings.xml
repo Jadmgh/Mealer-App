@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">SEG-Project-App</string>
+    <string-array name="meal_type_array">
+        <item>Any</item>
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Desert</item>
+        <item>Snack</item>
+        <item>Drink</item>
+    </string-array>
+
+    <string-array name="meal_cuisine_array">
+        <item>Any</item>
+        <item>French</item>
+        <item>Asian</item>
+        <item>Indian</item>
+        <item>Italian</item>
+        <item>Mexican</item>
+        <item>Lebanese</item>
+        <item>Greek</item>
+        <item>Other</item>
+    </string-array>
 </resources>

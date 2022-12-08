@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ClientProfileActivity"
+    tools:context=".ClientActivity"
     android:background="@drawable/img">
 
     <ImageView
@@ -48,15 +48,15 @@
 
                 android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerMealsResult"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/RequestTitle"
-                />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMealsResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/RequestTitle"
+        />
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 </LinearLayout>
